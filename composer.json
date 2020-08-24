@@ -1,0 +1,22 @@
+{
+    "name": "marispro/nova-dashboard-manager",
+    "description": "Dynamic dashboard creation and managing tool",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "marispro",
+            "email": "webstarty@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Marispro\\NovaDashboardManager\\DashboardManagerServiceProvider"
+            ]
+        }
+    }
+}
