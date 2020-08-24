@@ -5,8 +5,8 @@ Used packages:
 - digital-creative/nova-dashboard
 
 
-Add this to NovaServiceProvder.php
+Add this to NovaServiceProvder.php tools() method
 ```php
 new DashboardManager([
-]),
+])
 ```
