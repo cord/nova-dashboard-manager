@@ -1,6 +1,6 @@
 <?php
 
-namespace Marispro\NovaDashboardManager;
+namespace Marispro\NovaDashboard;
 
 use Illuminate\Support\Str;
 use Laravel\Nova\AuthorizedToSee;

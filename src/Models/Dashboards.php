@@ -1,6 +1,6 @@
 <?php
 
-namespace Marispro\NovaDashboardManager\Models;
+namespace Marispro\NovaDashboard\Models;
 
 use DigitalCreative\NovaDashboard\Action;
 use DigitalCreative\NovaDashboard\DashboardTrait;

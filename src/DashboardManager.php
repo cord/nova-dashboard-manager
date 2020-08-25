@@ -1,6 +1,6 @@
 <?php
 
-namespace Marispro\NovaDashboardManager;
+namespace Marispro\NovaDashboard;
 
 use DigitalCreative\NovaDashboard\Dashboard;
 use DigitalCreative\NovaDashboard\DashboardTrait;
@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Laravel\Nova\Tool;
-use Marispro\NovaDashboardManager\Models\Dashboards;
+use Marispro\NovaDashboar\Models\Dashboards;
 use NovaBI\NovaDataboards\Models\Databoard;
 use NovaBI\NovaDataboards\NovaDataboards;
 
