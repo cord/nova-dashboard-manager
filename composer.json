@@ -1,5 +1,5 @@
 {
-    "name": "marispro/nova-dashboard-manager",
+    "name": "marispro/nova-dashboard",
     "description": "Dynamic dashboard creation and managing tool",
     "type": "library",
     "license": "MIT",
