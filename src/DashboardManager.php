@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Laravel\Nova\Tool;
-use Marispro\NovaDashboar\Models\Dashboards;
+use Marispro\NovaDashboard\Models\Dashboards;
 use NovaBI\NovaDataboards\Models\Databoard;
 use NovaBI\NovaDataboards\NovaDataboards;
 
