@@ -22,5 +22,10 @@
                 "Marispro\\NovaDashboard\\DashboardManagerServiceProvider"
             ]
         }
+    },
+    "autoload": {
+        "psr-4": {
+            "Marispro\\NovaDashboard\\": "src/"
+        },
     }
 }
