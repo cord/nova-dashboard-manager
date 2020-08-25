@@ -21,6 +21,26 @@ class CustomDashboard extends Dashboard
 
     public static string $title = 'Custom Dashboard';
 
+    /**
+     * Get the URI for the resource.
+     *
+     * @return string
+     */
+    public function resourceUri(): string
+    {
+        return "custom-dashboard-{$this->model->id}";
+    }
+
+    /**
+     * Get the displayable label of the resource.
+     *
+     * @return string
+     */
+    public function resourceLabel(): string
+    {
+        return $this->model->name;
+    }
+
     public function views(): array
     {
         /**

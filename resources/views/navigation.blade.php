@@ -12,10 +12,10 @@
                 :to="{
                     name: 'nova-dashboard',
                     params: {
-                        dashboardKey: '{!! $resource->uriKey() !!}'
+                        dashboardKey: '{!! $resource->resourceUri() !!}'
                     }
                 }">
-                {{ $resource->label() }}
+                {{ $resource->resourceLabel() }}
             </router-link>
         </li>
     @endforeach

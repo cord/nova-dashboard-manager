@@ -2,6 +2,7 @@
 
 namespace Marispro\NovaDashboard;
 
+use DigitalCreative\NovaDashboard\Dashboard;
 use DigitalCreative\NovaDashboard\NovaDashboard;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
@@ -27,6 +28,32 @@ class DashboardManager extends NovaDashboard
                              ->filter(fn(Dashboards $dashboard) => $dashboard->authorizedToSee(request()))
                              ->mapInto(CustomDashboard::class);
         });
+    }
+
+    public function getCurrentActiveDashboard(string $dashboardKey): ?Dashboard
+    {
+
+        /**
+         * @var Dashboard $dashboard
+         */
+        foreach ($this->resolveDashboards() as $dashboard) {
+
+            if ($dashboard->resourceUri() === $dashboardKey) {
+
+                if (is_string($dashboard) && class_exists($dashboard)) {
+
+                    return new $dashboard();
+
+                }
+
+                return $dashboard;
+
+            }
+
+        }
+
+        return null;
+
     }
 
 }

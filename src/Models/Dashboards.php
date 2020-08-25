@@ -29,37 +29,6 @@ use NovaBI\NovaDataboards\Models\Databoard;
  */
 class Dashboards extends Databoard
 {
-    public static function humanize(string $value): string
-    {
-        return Str::title(Str::snake($value, ' '));
-    }
-
-    /**
-     * Get the displayable label of the resource.
-     *
-     * @return string
-     */
-    public function label(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * Get the URI for the resource.
-     *
-     * @return string
-     */
-    public function uriKey(): string
-    {
-        return "custom-dashboard-{$this->id}";
-    }
-
-    public function title(): string
-    {
-        return $this->name;
-    }
-
-
     use DashboardTrait;
 
     private string $dashboardKey;
