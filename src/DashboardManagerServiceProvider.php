@@ -13,7 +13,5 @@ class DashboardManagerServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'nova-dashboard-manager');
-
-
     }
 }
