@@ -19,7 +19,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Marispro\\NovaDashboardManager\\DashboardManagerServiceProvider"
+                "Marispro\\NovaDashboard\\DashboardManagerServiceProvider"
             ]
         }
     }
