@@ -11,6 +11,9 @@
     ],
     "minimum-stability": "dev",
     "require": {
+        "php": ">=7.4.0",
+        "nova-bi/nova-databoards": "*",
+        "digital-creative/nova-dashboard": "*"
     },
     "extra": {
         "laravel": {
