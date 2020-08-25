@@ -43,11 +43,6 @@ class DashboardManager extends NovaDashboard
 
     public function getCurrentActiveDashboard(string $dashboardKey)
     {
-        /**
-         * @var Dashboard $dashboard
-         */
-
-
         $dashboards = $this->resolveDashboards();
         $dashboardsProvided = Dashboards::all();
         foreach ($dashboardsProvided as $item) {

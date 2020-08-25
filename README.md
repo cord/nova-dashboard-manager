@@ -1,12 +1,24 @@
 Work in progress.
 
+#### Installation:
+
+Add the package using composer
+`composer require marispro/nova-dashboard`
+run Migrations
+php artisan migrate
+
 Used packages:
 - nova-bi/nova-databoards
 - digital-creative/nova-dashboard
 
 
-Add this to NovaServiceProvder.php tools() method
+Add to the tools()-method in your NovaServiceProvider.php like this:
 ```php
-new DashboardManager([
-])
+public function tools()
+{
+    return [
+        new DashboardManager(),
+        new NovaDataboards(),
+    ];
+}
 ```
