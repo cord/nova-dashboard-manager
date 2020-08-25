@@ -3,31 +3,31 @@
 namespace Marispro\NovaDashboard;
 
 use DigitalCreative\NovaDashboard\Dashboard;
-use DigitalCreative\NovaDashboard\DashboardTrait;
 use DigitalCreative\NovaDashboard\Examples\Views\AnotherView;
-use DigitalCreative\NovaDashboard\Examples\Views\ProductsSalesView;
-use Marispro\NovaDashboard\DashboardManagerTrait;
-use Marispro\NovaDashboard\Models\Dashboards;
+use Marispro\NovaDashboard\Models\Dashboards as DashboardModel;
 
 class CustomDashboard extends Dashboard
 {
-    use DashboardManagerTrait, DashboardTrait {
-        DashboardManagerTrait::title insteadof DashboardTrait;
-        DashboardManagerTrait::humanize insteadof DashboardTrait;
-        DashboardManagerTrait::label insteadof DashboardTrait;
-        DashboardManagerTrait::uriKey insteadof DashboardTrait;
-        DashboardManagerTrait::meta insteadof DashboardTrait;
+
+    private DashboardModel $model;
+
+    /**
+     * @param DashboardModel $dashboards
+     */
+    public function __construct(DashboardModel $dashboards)
+    {
+        $this->model = $dashboards;
     }
 
     public static string $title = 'Custom Dashboard';
 
-
-
     public function views(): array
     {
+        /**
+         * Here you have access to $this->model ... so you can build any custom view dynamically...
+         * you can also pass the same model down to the custom views to build the widgets dynamically too
+         */
         return [
-
-//new Dashboards() // set id to current dashboard
             AnotherView::make()->editable()
         ];
     }
