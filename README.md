@@ -13,7 +13,7 @@ Run Migrations
 Used packages:
 - nova-bi/nova-databoards
 - digital-creative/nova-dashboard
-#####
+####
 NovaServiceProvider.php add classes:
 ```php
 use Marispro\NovaDashboardManager\DashboardManager;
