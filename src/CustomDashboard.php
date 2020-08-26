@@ -1,10 +1,10 @@
 <?php
 
-namespace Marispro\NovaDashboard;
+namespace Marispro\NovaDashboardManager;
 
 use DigitalCreative\NovaDashboard\Dashboard;
 use DigitalCreative\NovaDashboard\Examples\Views\AnotherView;
-use Marispro\NovaDashboard\Models\Dashboards as DashboardModel;
+use Marispro\NovaDashboardManager\Models\Dashboards as DashboardModel;
 
 class CustomDashboard extends Dashboard
 {

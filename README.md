@@ -4,7 +4,7 @@ Work in progress.
 
 Add the package using composer
 
-`composer require marispro/nova-dashboard`
+`composer require marispro/nova-dashboard-manager`
 
 Run Migrations
 

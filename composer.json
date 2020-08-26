@@ -1,5 +1,5 @@
 {
-    "name": "marispro/nova-dashboard",
+    "name": "marispro/nova-dashboard-manager",
     "description": "Dynamic dashboard creation and managing tool",
     "type": "library",
     "license": "MIT",
@@ -19,13 +19,13 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Marispro\\NovaDashboard\\DashboardManagerServiceProvider"
+                "Marispro\\NovaDashboardManager\\DashboardManagerServiceProvider"
             ]
         }
     },
     "autoload": {
         "psr-4": {
-            "Marispro\\NovaDashboard\\": "src/"
+            "Marispro\\NovaDashboardManager\\": "src/"
         }
     }
 }

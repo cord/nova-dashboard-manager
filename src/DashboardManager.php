@@ -1,12 +1,12 @@
 <?php
 
-namespace Marispro\NovaDashboard;
+namespace Marispro\NovaDashboardManager;
 
 use DigitalCreative\NovaDashboard\Dashboard;
 use DigitalCreative\NovaDashboard\NovaDashboard;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
-use Marispro\NovaDashboard\Models\Dashboards;
+use Marispro\NovaDashboardManager\Models\Dashboards;
 
 class DashboardManager extends NovaDashboard
 {

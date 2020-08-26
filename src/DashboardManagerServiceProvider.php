@@ -1,6 +1,6 @@
 <?php
 
-namespace Marispro\NovaDashboard;
+namespace Marispro\NovaDashboardManager;
 use Illuminate\Support\ServiceProvider;
 
 class DashboardManagerServiceProvider extends ServiceProvider
