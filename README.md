@@ -13,11 +13,13 @@ Run Migrations
 Used packages:
 - nova-bi/nova-databoards
 - digital-creative/nova-dashboard
-
-
-use Marispro\NovaDashboard\DashboardManager;
-
-Add to the tools()-method in your NovaServiceProvider.php like this:
+#####
+NovaServiceProvider.php add classes:
+```php
+use Marispro\NovaDashboardManager\DashboardManager;
+use NovaBI\NovaDataboards\NovaDataboards;
+```
+Add to the tools() methods like this:
 ```php
 public function tools()
 {
