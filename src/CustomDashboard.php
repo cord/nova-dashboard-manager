@@ -3,6 +3,7 @@
 namespace Marispro\NovaDashboardManager;
 
 use DigitalCreative\NovaDashboard\Dashboard;
+use Illuminate\Support\Str;
 use Marispro\NovaDashboardManager\Models\Dashboards;
 use Marispro\NovaDashboardManager\Views\CustomView;
 use Marispro\NovaDashboardManager\Models\Dashboards as DashboardModel;
@@ -23,7 +24,14 @@ class CustomDashboard extends Dashboard
         $this->model = $dashboards;
     }
 
-    public static string $title = 'Custom Dashboard';
+    public static string $title = 'Custom Dashboardd';
+
+    public static function humanize($value = null): string
+    {
+        return 'xzc';
+    }
+
+
 
     /**
      * Get the URI for the resource.

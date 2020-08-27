@@ -2,9 +2,12 @@
 
 namespace Marispro\NovaDashboardManager\Views;
 
+use DigitalCreative\NovaDashboard\Action;
 use DigitalCreative\NovaDashboard\Examples\Actions\UniqueAction;
 use DigitalCreative\NovaDashboard\Examples\Widgets\ExampleWidgetOne;
 use DigitalCreative\NovaDashboard\View;
+use DigitalCreative\NovaDashboard\Widget;
+use Illuminate\Support\Collection;
 use Marispro\NovaDashboardManager\Models\Dashboards as DashboardModel;
 
 class CustomView extends View
@@ -17,6 +20,52 @@ class CustomView extends View
         // todo: remove duplicated query. Can be done after merging with nova-bi. Need to move all morphable models to nova-dashboard-manager
         $this->databoard = \NovaBI\NovaDataboards\Models\Databoard::find($dashboard->id);
     }
+
+    public function titler($title = null)
+    {
+        return $this->databoard->name;
+    }
+
+    private function resolveActions(): Collection
+    {
+        return once(function () {
+            return collect($this->actions())->filter(function (Action $action) {
+                return $action->authorizedToSee(request());
+            });
+        });
+    }
+
+    private function resolveSchemas(): Collection
+    {
+        return $this->resolveWidgets()
+            ->mapWithKeys(function (Widget $widget) {
+                return [
+                    $widget->uriKey() => $widget->getSchema(),
+                ];
+            });
+    }
+
+    private function resolveWidgets(): Collection
+    {
+        return once(function () {
+            return collect($this->widgets())->filter(function (Widget $widget) {
+                return $widget->authorizedToSee(request());
+            });
+        });
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'title' => $this->titler(),
+            'uriKey' => $this->uriKey(),
+            'filters' => $this->resolveFilters(),
+            'actions' => $this->resolveActions(),
+            'schemas' => $this->resolveSchemas(),
+            'meta' => $this->meta(),
+        ];
+    }
+
 
     public function filters(): array
     {
