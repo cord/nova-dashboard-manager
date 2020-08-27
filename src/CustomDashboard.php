@@ -3,8 +3,12 @@
 namespace Marispro\NovaDashboardManager;
 
 use DigitalCreative\NovaDashboard\Dashboard;
-use DigitalCreative\NovaDashboard\Examples\Views\AnotherView;
+use Marispro\NovaDashboardManager\Models\Dashboards;
+use Marispro\NovaDashboardManager\Views\CustomView;
 use Marispro\NovaDashboardManager\Models\Dashboards as DashboardModel;
+use Nemrutco\NovaGlobalFilter\NovaGlobalFilter;
+use NovaBI\NovaDataboards\Models\Datafilter;
+use NovaBI\NovaDataboards\Nova\Databoard;
 
 class CustomDashboard extends Dashboard
 {
@@ -47,8 +51,25 @@ class CustomDashboard extends Dashboard
          * Here you have access to $this->model ... so you can build any custom view dynamically...
          * you can also pass the same model down to the custom views to build the widgets dynamically too
          */
+        //dd(Datafilter::whereFilterableId($this->model->id)->first()->filterable);
+
+        $filterCards = [];
+        $databoard = \NovaBI\NovaDataboards\Models\Databoard::find($this->model->id);
+        // collect data filters
+        $databoard->datafilters->each(function ($datafilter, $key) use (&$filterCards) {
+            $filterCards[] = (new $datafilter->filterable->filter)->withMeta([]);
+        });
+
+
+
+        $headerCards = [];
+        $widgetCards = [];
+        //dd($filterCards);
+        //return array_merge($headerCards, $filterPanel, $widgetCards);
         return [
-            AnotherView::make()->editable()
+            new CustomView($this->model),
+            //CustomView::make()->editable()
+                //->filters($filterCards)
         ];
     }
 

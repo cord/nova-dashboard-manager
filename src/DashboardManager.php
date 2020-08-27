@@ -37,7 +37,6 @@ class DashboardManager extends NovaDashboard
          * @var Dashboard $dashboard
          */
         foreach ($this->resolveDashboards() as $dashboard) {
-
             if ($dashboard->resourceUri() === $dashboardKey) {
 
                 if (is_string($dashboard) && class_exists($dashboard)) {
