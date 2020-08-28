@@ -1,6 +1,6 @@
 <h3 class="flex items-center font-normal text-white mb-6 text-base no-underline">
     <span class="sidebar-label">
-        New Dashboards
+        Dashboard Manager
     </span>
 </h3>
 
@@ -22,4 +22,39 @@
             </router-link>
         </li>
     @endforeach
+
+    <li>
+        <h4 class="ml-8 mb-4 text-xs text-white-50% uppercase tracking-wide">{{ __('Configuration') }}</h4>
+    </li>
+
+        <li class="leading-wide mb-2 text-sm">
+            <router-link :to="{
+                    name: 'index',
+                    params: {
+                        resourceName: '{{ Marispro\NovaDashboardManager\Nova\DataboardConfiguration::uriKey() }}',
+                    }
+                }" class="text-white ml-8 no-underline dim">
+                - {{ __('Dashboards') }}
+            </router-link>
+        </li>
+        <li class="leading-wide mb-2 text-sm">
+            <router-link :to="{
+                    name: 'index',
+                    params: {
+                        resourceName: '{{ \NovaBI\NovaDataboards\Nova\Datawidget::uriKey() }}',
+                    }
+                }" class="text-white ml-8 no-underline dim">
+                - {{ __('Widgets') }}
+            </router-link>
+        </li>
+        <li class="leading-wide mb-2 text-sm">
+            <router-link :to="{
+                    name: 'index',
+                    params: {
+                        resourceName: '{{ \NovaBI\NovaDataboards\Nova\Datafilter::uriKey() }}',
+                    }
+                }" class="text-white ml-8 no-underline dim">
+                - {{ __('Filter') }}
+            </router-link>
+        </li>
 </ul>
