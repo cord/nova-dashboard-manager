@@ -90,7 +90,6 @@ class CustomView extends View
         $widgets = [];
 
         $this->databoard->datawidgets->each(function ($datawidget, $key) use (&$widgets) {
-            //dd($datawidget->metricable->visualable->getVisualisation());
             $widgets[] = (
                 $datawidget->metricable->visualable->getVisualisation()
             )

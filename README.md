@@ -29,3 +29,17 @@ public function tools()
     ];
 }
 ```
+
+**Recommended:** Publish Configuration File
+
+    php artisan vendor:publish --provider="Marispro\NovaDashboardManager\DashboardManagerServiceProvider" --tag="config"
+
+
+with `showToolMenu` you can configure if you want to use the Tool Menu default Resource Listing. Set to `false` when using with [Collapsible Resource Manager](https://novapackages.com/packages/digital-creative/collapsible-resource-manager).
+
+    
+    
+    
+**Optional:** Publish Migrations
+    
+    php artisan vendor:publish --provider="Marispro\NovaDashboardManager\DashboardManagerServiceProvider" --tag="migrations"

@@ -13,6 +13,9 @@
                     name: 'nova-dashboard',
                     params: {
                         dashboardKey: '{!! $resource->resourceUri() !!}'
+                    },
+                    query: {
+                        dashboardId: {{ $resource->resourceId() }}
                     }
                 }">
                 {{ $resource->resourceLabel() }}

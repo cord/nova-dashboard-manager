@@ -28,10 +28,19 @@ class CustomDashboard extends Dashboard
 
     public static function humanize($value = null): string
     {
-        return 'xzc';
+        return 'test';
     }
 
 
+    /**
+     * Get the ID for the resource.
+     *
+     * @return int
+     */
+    public function resourceId(): int
+    {
+        return $this->model->id;
+    }
 
     /**
      * Get the URI for the resource.
