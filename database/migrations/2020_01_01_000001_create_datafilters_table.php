@@ -7,7 +7,7 @@ class CreateDatafiltersTable extends Migration
 {
     public function up()
     {
-        Schema::create('datafilters', function (Blueprint $table) {
+        Schema::create(config('nova-dashboard-manager.tables.filters'), function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->text('description')->nullable();
@@ -21,6 +21,6 @@ class CreateDatafiltersTable extends Migration
 
     public function down()
     {
-        Schema::drop('datafilters');
+        Schema::drop(config('nova-dashboard-manager.tables.filters'));
     }
 }

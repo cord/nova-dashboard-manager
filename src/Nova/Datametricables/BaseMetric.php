@@ -1,10 +1,10 @@
 <?php
 
-namespace NovaBI\NovaDataboards\Nova\Datametricables;
+namespace Marispro\NovaDashboardManager\Nova\Datametricables;
 
 use App\Nova\Resource;
-use NovaBI\NovaDataboards\Models\Datavisualables\Value;
-use NovaBI\NovaDataboards\Traits\LoadMorphablesTrait;
+use Marispro\NovaDashboardManager\Models\Datavisualables\Value;
+use Marispro\NovaDashboardManager\Traits\LoadMorphablesTrait;
 use DigitalCreative\InlineMorphTo\HasInlineMorphToFields;
 use DigitalCreative\InlineMorphTo\InlineMorphTo;
 use Illuminate\Http\Request;
@@ -28,7 +28,7 @@ class BaseMetric extends Resource
      *
      * @var  string
      */
-    public static $model = \NovaBI\NovaDataboards\Models\Datametricables\BaseDatametricable::class;
+    public static $model = \Marispro\NovaDashboardManager\Models\Datametricables\BaseDatametricable::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -59,7 +59,7 @@ class BaseMetric extends Resource
             [
                 InlineMorphTo::make(__('Visualisation'), 'visualable')
                     ->types($this->loadVisualables())
-                    ->default(\NovaBI\NovaDataboards\Models\Datavisualables\Value::class)
+                    ->default(\Marispro\NovaDashboardManager\Models\Datavisualables\Value::class)
                     ->onlyOnForms()->required()
             ]);
     }
@@ -83,7 +83,7 @@ class BaseMetric extends Resource
      */
     public function loadVisualables()
     {
-//        $loadPath = base_path(config('nova-databoards.path') . 'Nova/Datavisualables');
+//        $loadPath = base_path(config('nova-dashboard-manager.path') . 'Nova/Datavisualables');
 //        $datavisualables = $this->loadMorphables($loadPath);
 
         /*
@@ -91,7 +91,7 @@ class BaseMetric extends Resource
          * the metric-methode 'calculate' must return a valid calculation
          */
 
-        $datavisualables = config('nova-databoards.datavisualables.resources');
+        $datavisualables = config('nova-dashboard-manager.datavisualables.resources');
         $datavisualables = array_filter($datavisualables, function ($visual) {
             return in_array(class_basename($visual), $this->newModel()->getVisualisationTypes());
         });

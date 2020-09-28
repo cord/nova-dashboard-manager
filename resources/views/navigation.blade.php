@@ -1,6 +1,6 @@
 <h3 class="flex items-center font-normal text-white mb-6 text-base no-underline">
     <span class="sidebar-label">
-        Dashboard Manager
+        {{ __('Dashboard Manager') }}
     </span>
 </h3>
 
@@ -31,17 +31,17 @@
             <router-link :to="{
                     name: 'index',
                     params: {
-                        resourceName: '{{ Marispro\NovaDashboardManager\Nova\DataboardConfiguration::uriKey() }}',
+                        resourceName: '{{ Marispro\NovaDashboardManager\Nova\DashboardConfiguration::uriKey() }}',
                     }
                 }" class="text-white ml-8 no-underline dim">
-                - {{ __('Dashboards') }}
+                - {{ __('Dashboard') }}
             </router-link>
         </li>
         <li class="leading-wide mb-2 text-sm">
             <router-link :to="{
                     name: 'index',
                     params: {
-                        resourceName: '{{ \NovaBI\NovaDataboards\Nova\Datawidget::uriKey() }}',
+                        resourceName: '{{ \Marispro\NovaDashboardManager\Nova\Datawidget::uriKey() }}',
                     }
                 }" class="text-white ml-8 no-underline dim">
                 - {{ __('Widgets') }}
@@ -51,7 +51,7 @@
             <router-link :to="{
                     name: 'index',
                     params: {
-                        resourceName: '{{ \NovaBI\NovaDataboards\Nova\Datafilter::uriKey() }}',
+                        resourceName: '{{ \Marispro\NovaDashboardManager\Nova\Datafilter::uriKey() }}',
                     }
                 }" class="text-white ml-8 no-underline dim">
                 - {{ __('Filter') }}

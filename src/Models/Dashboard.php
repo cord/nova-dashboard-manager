@@ -4,12 +4,9 @@ namespace Marispro\NovaDashboardManager\Models;
 
 use DigitalCreative\NovaDashboard\Action;
 use DigitalCreative\NovaDashboard\DashboardTrait;
-use DigitalCreative\NovaDashboard\Examples\Views\AnotherView;
-use DigitalCreative\NovaDashboard\Examples\Views\ProductsSalesView;
 use DigitalCreative\NovaDashboard\Filters;
 use DigitalCreative\NovaDashboard\Models\Widget as WidgetModel;
 use DigitalCreative\NovaDashboard\ValueResult;
-use DigitalCreative\NovaDashboard\View;
 use DigitalCreative\NovaDashboard\Widget;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +14,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Laravel\Nova\Contracts\Filter as FilterContract;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use NovaBI\NovaDataboards\Models\Databoard;
+use Marispro\NovaDashboardManager\Traits\HasSchemalessAttributesTrait;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 
 /**
  * @property int id
@@ -27,12 +26,55 @@ use NovaBI\NovaDataboards\Models\Databoard;
  * @property Collection options
  * @property Collection coordinates
  */
-class Dashboards extends Databoard
+class Dashboard extends Model implements Sortable
 {
     use DashboardTrait;
+    use SortableTrait;
+    use HasSchemalessAttributesTrait;
 
     private string $dashboardKey;
     private bool $private = false;
+
+    public $casts = [
+        'extra_attributes' => 'array',
+    ];
+
+    public $sortable = [
+        'order_column_name' => 'sort_order',
+        'sort_when_creating' => true,
+    ];
+
+    public $timestamps = true;
+
+    public $translatable = ['description'];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->setTable(config('nova-dashboard-manager.tables.dashboards'));
+    }
+
+
+    public function dashboardable()
+    {
+        return $this->morphTo();
+    }
+
+    public function datawidgets()
+    {
+        return $this->belongsToMany(Datawidget::class,
+            Str::singular(config('nova-dashboard-manager.tables.dashboards')) . '_' . Str::singular(config('nova-dashboard-manager.tables.widgets'))
+
+        )->orderBy(config('nova-dashboard-manager.tables.widgets').'.sort_order', 'asc');
+    }
+
+    public function datafilters()
+    {
+        return $this->belongsToMany(Datafilter::class,
+            Str::singular(config('nova-dashboard-manager.tables.dashboards')) . '_' . Str::singular(config('nova-dashboard-manager.tables.filters'))
+        )->orderBy(config('nova-dashboard-manager.tables.filters').'.sort_order', 'asc');
+    }
+
 
     public function setDashboard(string $dashboardKey): self
     {
@@ -43,9 +85,7 @@ class Dashboards extends Databoard
 
     public function filters(): array
     {
-        return [
-
-        ];
+        return [];
     }
 
     public function actions(): array
@@ -60,15 +100,10 @@ class Dashboards extends Databoard
 
     public function resolveWidgetValue(string $widgetKey, Collection $options, Filters $filters): ValueResult
     {
-
         if ($widget = $this->findWidgetByKey($widgetKey)) {
-
             return $widget->resolveValue($options, $filters);
-
         }
-
-        abort(404, __('Widget :widget not found.', [ 'widget' => $widgetKey ]));
-
+        abort(404, __('Widget :widget not found.', ['widget' => $widgetKey]));
     }
 
     public function findWidgetByKey(string $key): ?Widget
@@ -106,7 +141,7 @@ class Dashboards extends Databoard
      */
     public function editable($editable = true): self
     {
-        return $this->withMeta([ 'editable' => $editable ]);
+        return $this->withMeta(['editable' => $editable]);
     }
 
     public function isEditable(): bool
@@ -145,13 +180,10 @@ class Dashboards extends Databoard
     {
         return $this->resolveWidgets()
             ->map(function (Widget $widget) {
-
                 if ($preset = $widget->preset) {
-
                     return $widget->hydrateFromPreset($preset);
-
                 }
-
+                return null;
             });
     }
 
@@ -164,7 +196,7 @@ class Dashboards extends Databoard
          * @var Collection $withPresets
          * @var Collection $withoutPresets
          */
-        [ $withPresets, $withoutPresets ] = $widgets->partition(function (Widget $widget) {
+        [$withPresets, $withoutPresets] = $widgets->partition(function (Widget $widget) {
             return $widget->preset;
         });
 
@@ -192,20 +224,13 @@ class Dashboards extends Databoard
             })
             ->get()
             ->map(function (WidgetModel $model) {
-
                 if ($widget = $this->findWidgetByKey($model->key)) {
-
                     return (clone $widget)->hydrate($model);
-
                 }
-
                 return null;
-
             })
             ->filter();
-
         return $fromDatabase->concat($fromPreset);
-
     }
 
     public function resolveDataFromDatabase(): Collection
@@ -221,15 +246,10 @@ class Dashboards extends Databoard
             ->where('view', $this->uriKey())
             ->get()
             ->map(function (WidgetModel $model) {
-
                 if ($widget = $this->findWidgetByKey($model->key)) {
-
                     return (clone $widget)->hydrate($model);
-
                 }
-
                 return null;
-
             })
             ->filter();
 

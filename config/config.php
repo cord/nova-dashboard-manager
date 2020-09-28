@@ -2,19 +2,37 @@
 declare(strict_types=1);
 
 return [
+
     // want to show or hide the default tool menu?
     'showToolMenu' => true,
 
-    'databoardables' => [
+    'tables' => [
+        'widget_configurations' => 'dwidget_configurations',
+        'widgets' => 'dwidgets',
+        'metrics' => 'dmetrics',
+        'visuals' => 'dvisuals',
+        'filters' => 'dfilters',
+        'dashboards' => 'dboards',
+    ],
+
+    'models' => [
+        'widget_configuration' => \DigitalCreative\NovaDashboard\Models\Widget::class,
+        'widget' => \Marispro\NovaDashboardManager\Models\Datawidget::class,
+        'filter' => \Marispro\NovaDashboardManager\Models\Datafilter::class,
+        'dashboard' => \Marispro\NovaDashboardManager\Models\Dashboard::class
+    ],
+
+
+    'dashboardables' => [
         // Todo: make configurable
         'default' => 'todo',
 
         'resources' => [
-            \NovaBI\NovaDataboards\Nova\Databoardables\Standard::class, // example databoardable
+            \Marispro\NovaDashboardManager\Nova\Dashboardables\Standard::class, // example dashboardable
         ],
 
         // TODO: load all resources from these paths
-        'paths' => [ ]
+        'paths' => []
 
     ],
 
@@ -26,14 +44,14 @@ return [
         'default' => 'todo',
 
         'resources' => [
-            \NovaBI\NovaDataboards\Nova\Datafilterables\DateFrom::class,
-            \NovaBI\NovaDataboards\Nova\Datafilterables\DateTo::class,
-            \NovaBI\NovaDataboards\Nova\Datafilterables\ActionEventTypes::class,
+            \Marispro\NovaDashboardManager\Nova\Datafilterables\DateFrom::class,
+            \Marispro\NovaDashboardManager\Nova\Datafilterables\DateTo::class,
+            \Marispro\NovaDashboardManager\Nova\Datafilterables\ActionEventTypes::class,
 
         ],
 
         // TODO: load all resources from these paths
-        'paths' => [ ]
+        'paths' => []
     ],
 
     /*
@@ -45,14 +63,14 @@ return [
         'default' => 'todo',
 
         'resources' => [
-            \NovaBI\NovaDataboards\Nova\Datametricables\users::class, // example databoardable
-            \NovaBI\NovaDataboards\Nova\Datametricables\boards::class, // example databoardable
-            \NovaBI\NovaDataboards\Nova\Datametricables\widgets::class, // example databoardable
-            \NovaBI\NovaDataboards\Nova\Datametricables\actionEvents::class, // example databoardable
+            \Marispro\NovaDashboardManager\Nova\Datametricables\users::class, // example dashboardable
+            \Marispro\NovaDashboardManager\Nova\Datametricables\boards::class, // example dashboardable
+            \Marispro\NovaDashboardManager\Nova\Datametricables\widgets::class, // example dashboardable
+            \Marispro\NovaDashboardManager\Nova\Datametricables\actionEvents::class, // example dashboardable
         ],
 
         // TODO: load all resources from these paths
-        'paths' => [ ]
+        'paths' => []
     ],
 
     /*
@@ -68,13 +86,13 @@ return [
          *      var $visualisationTypes = ['Value', 'Trend'];
          */
         'resources' => [
-            'Value' => \NovaBI\NovaDataboards\Nova\Datavisualables\Value::class,
-            'Trend' => \NovaBI\NovaDataboards\Nova\Datavisualables\Trend::class,
-            'Partition' => \NovaBI\NovaDataboards\Nova\Datavisualables\Partition::class
+            'Value' => \Marispro\NovaDashboardManager\Nova\Datavisualables\Value::class,
+//            'Trend' => \Marispro\NovaDashboardManager\Nova\Datavisualables\Trend::class,
+//            'Partition' => \Marispro\NovaDashboardManager\Nova\Datavisualables\Partition::class
         ],
 
         // TODO: load all resources from these paths
-        'paths' => [ ]
+        'paths' => []
     ],
 
 ];

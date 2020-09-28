@@ -11,13 +11,13 @@ Run Migrations
 `php artisan migrate`
 
 Used packages:
-- nova-bi/nova-databoards
+- nova-bi/nova-dashboard-manager
 - digital-creative/nova-dashboard
 ####
 NovaServiceProvider.php add classes:
 ```php
 use Marispro\NovaDashboardManager\DashboardManager;
-use NovaBI\NovaDataboards\NovaDataboards;
+use Marispro\NovaDashboardManager\NovaDataboards;
 ```
 Add to the tools() methods like this:
 ```php

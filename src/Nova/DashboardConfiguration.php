@@ -3,11 +3,11 @@
 namespace Marispro\NovaDashboardManager\Nova;
 
 use App\Nova\Situation;
-use NovaBI\NovaDataboards\Nova\Databoardables\BaseFilter;
+use Marispro\NovaDashboardManager\Nova\Dashboardables\BaseFilter;
 
 use Laravel\Nova\Resource;
 
-use NovaBI\NovaDataboards\Traits\LoadMorphablesTrait;
+use Marispro\NovaDashboardManager\Traits\LoadMorphablesTrait;
 
 use Digitalazgroup\PlainText\PlainText;
 use Eminiarts\Tabs\Tabs;
@@ -23,9 +23,9 @@ use Saumini\Count\RelationshipCount;
 use OptimistDigital\NovaSortable\Traits\HasSortableRows;
 
 
-class DataboardConfiguration extends Resource
+class DashboardConfiguration extends Resource
 {
-    public static $displayInNavigation = false;
+//    public static $displayInNavigation = false;
 
     use HasSortableRows;
     use HasInlineMorphToFields;
@@ -45,7 +45,7 @@ class DataboardConfiguration extends Resource
      *
      * @var  string
      */
-    public static $model = \NovaBI\NovaDataboards\Models\Databoard::class;
+    public static $model = \Marispro\NovaDashboardManager\Models\Dashboard::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -92,19 +92,19 @@ class DataboardConfiguration extends Resource
     public function fields(Request $request)
     {
 
-        $databoardables = config('nova-databoards.databoardables.resources');
+        $dashboardables = config('nova-dashboard-manager.dashboardables.resources');
 
         /*
-         * todo: autoload from config('nova-databoards.databoardables.paths')
-        $databoardables = $this->loadMorphables(config('nova-databoards.databoardables'));
-        $databoardables = array_filter($databoardables, function ($boardable) {
+         * todo: autoload from config('nova-dashboard-manager.dashboardables.paths')
+        $dashboardables = $this->loadMorphables(config('nova-dashboard-manager.dashboardables'));
+        $dashboardables = array_filter($dashboardables, function ($boardable) {
             return class_basename($boardable) != 'BaseBoard';
         });
         */
 
         $fields = [
-            InlineMorphTo::make(__('Board Type'), 'databoardable')
-                ->types($databoardables)->required()->hideFromIndex()
+            InlineMorphTo::make(__('Board Type'), 'dashboardable')
+                ->types($dashboardables)->required()->hideFromIndex()
 //                ->default(),
         ];
 
@@ -125,8 +125,8 @@ class DataboardConfiguration extends Resource
                 $fields,
                 [
                     PlainText::make(__('Databoard Type'), function () {
-                        if (method_exists($this->databoardable, 'label')) {
-                            return $this->databoardable->label();
+                        if (method_exists($this->dashboardable, 'label')) {
+                            return $this->dashboardable->label();
                         }
                         return '';
                     }),
@@ -172,10 +172,10 @@ class DataboardConfiguration extends Resource
     public function cards(Request $request)
     {
         $cards = [];
-        if (\NovaBI\NovaDataboards\Models\Datawidget::count() == 0) {
+        if (\Marispro\NovaDashboardManager\Models\Datawidget::count() == 0) {
             $cards[] =(new Info())->info(__('Please <a href="databoardWidget" class="text-primary dim no-underline">configure your first Widget</a>'))->asHtml();
         }
-        if (\NovaBI\NovaDataboards\Models\Datafilter::count() == 0) {
+        if (\Marispro\NovaDashboardManager\Models\Datafilter::count() == 0) {
             $cards[] =(new Info())->info(__('Please <a href="databoardFilter" class="text-primary dim no-underline">configure your first Filter</a>'))->asHtml();
         }
         return $cards;
@@ -216,6 +216,6 @@ class DataboardConfiguration extends Resource
 
     public static function availableForNavigation(Request $request)
     {
-        return (config('nova-databoards.showToolMenu') === false);
+        return (config('nova-dashboard-manager.showToolMenu') === false);
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace NovaBI\NovaDataboards\Nova\Datavisualables;
+namespace Marispro\NovaDashboardManager\Nova\Datavisualables;
 
 use App\Nova\Resource;
-use NovaBI\NovaDataboards\Traits\LoadMorphablesTrait;
+use Marispro\NovaDashboardManager\Traits\LoadMorphablesTrait;
 use DigitalCreative\InlineMorphTo\HasInlineMorphToFields;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Select;
@@ -25,7 +25,7 @@ class BaseVisual extends Resource
      *
      * @var  string
      */
-    public static $model = \NovaBI\NovaDataboards\Models\Datavisualables\BaseDatavisualable::class;
+    public static $model = \Marispro\NovaDashboardManager\Models\Datavisualables\BaseDatavisualable::class;
 
 
     /**
@@ -54,7 +54,7 @@ class BaseVisual extends Resource
      */
     public function fields(Request $request)
     {
-        $cardWidthAll = (new \NovaBI\NovaDataboards\Models\Datavisualables\BaseDatavisualable)->getCardWidthAll();
+        $cardWidthAll = (new \Marispro\NovaDashboardManager\Models\Datavisualables\BaseDatavisualable)->getCardWidthAll();
         $cardWidthSupported = $this->newModel()->getCardWidthSupported();
         $cardWidthOptions =  array_intersect_key($cardWidthAll, array_flip($cardWidthSupported));
         return array_merge(

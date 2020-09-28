@@ -8,7 +8,7 @@ use DigitalCreative\NovaDashboard\Examples\Widgets\ExampleWidgetOne;
 use DigitalCreative\NovaDashboard\View;
 use DigitalCreative\NovaDashboard\Widget;
 use Illuminate\Support\Collection;
-use Marispro\NovaDashboardManager\Models\Dashboards as DashboardModel;
+use Marispro\NovaDashboardManager\Models\Dashboard as DashboardModel;
 
 class CustomView extends View
 {
@@ -18,9 +18,10 @@ class CustomView extends View
     {
         //$this->dashboard = $dashboard;
         // todo: remove duplicated query. Can be done after merging with nova-bi. Need to move all morphable models to nova-dashboard-manager
-        $this->databoard = \NovaBI\NovaDataboards\Models\Databoard::find($dashboard->id);
+        $this->databoard = \Marispro\NovaDashboardManager\Models\Databoard::find($dashboard->id);
     }
 
+    // not used
     public function titler($title = null)
     {
         return $this->databoard->name;
@@ -90,17 +91,23 @@ class CustomView extends View
         $widgets = [];
 
         $this->databoard->datawidgets->each(function ($datawidget, $key) use (&$widgets) {
-            $widgets[] = (
-                $datawidget->metricable->visualable->getVisualisation()
-            )
-                ->width($datawidget->metricable->visualable->cardWidth)
-                ->withMeta(['widget_id' => $datawidget->id, 'label' => $datawidget->name]);
+            $widgets[] =
+                $datawidget->metricable->visualable->getVisualisation(
+                    [
+                        'title' => $datawidget->name,
+                        'metric' => $datawidget->metricable
+
+                    ]
+                );
+//                ->width($datawidget->metricable->visualable->cardWidth)
+//                ->withMeta(['widget_id' => $datawidget->id, 'label' => $datawidget->name])
+            ;
         });
 
-        //dd($widgets);
-
+//        dd($widgets);
+        return $widgets;
         /* TODO: Need help to change instance type (again..)
-         * Argument 1 passed to DigitalCreative\NovaDashboard\View::DigitalCreative\NovaDashboard\{closure}() must be an instance of DigitalCreative\NovaDashboard\Widget, instance of NovaBI\NovaDataboards\Models\Datavisualables\Visuals\Value given
+         * Argument 1 passed to DigitalCreative\NovaDashboard\View::DigitalCreative\NovaDashboard\{closure}() must be an instance of DigitalCreative\NovaDashboard\Widget, instance of Marispro\NovaDashboardManager\Models\Datavisualables\Visuals\Value given
          */
 
         return [];

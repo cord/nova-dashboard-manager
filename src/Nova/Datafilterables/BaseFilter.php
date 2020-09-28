@@ -1,10 +1,10 @@
 <?php
 
-namespace NovaBI\NovaDataboards\Nova\Datafilterables;
+namespace Marispro\NovaDashboardManager\Nova\Datafilterables;
 
 use App\Nova\Resource;
-use NovaBI\NovaDataboards\Models\Datafilterables\BaseDatafilterable;
-use NovaBI\NovaDataboards\Traits\LoadMorphablesTrait;
+use Marispro\NovaDashboardManager\Models\Datafilterables\BaseDatafilterable;
+use Marispro\NovaDashboardManager\Traits\LoadMorphablesTrait;
 use DigitalCreative\InlineMorphTo\HasInlineMorphToFields;
 use DigitalCreative\InlineMorphTo\InlineMorphTo;
 use Illuminate\Http\Request;
@@ -15,7 +15,6 @@ use Laravel\Nova\Fields\Text;
 class BaseFilter extends Resource
 {
     use LoadMorphablesTrait;
-
     use HasInlineMorphToFields;
 
     public static $displayInNavigation = false;

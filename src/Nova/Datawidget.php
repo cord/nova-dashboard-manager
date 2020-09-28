@@ -4,9 +4,9 @@ namespace Marispro\NovaDashboardManager\Nova;
 
 use Laravel\Nova\Resource;
 
-use NovaBI\NovaDataboards\Nova\Datametricables\myMetric;
-use NovaBI\NovaDataboards\Nova\Datavisualables\Value;
-use NovaBI\NovaDataboards\Traits\LoadMorphablesTrait;
+use Marispro\NovaDashboardManager\Nova\Datametricables\myMetric;
+use Marispro\NovaDashboardManager\Nova\Datavisualables\Value;
+use Marispro\NovaDashboardManager\Traits\LoadMorphablesTrait;
 use Comodolab\Nova\Fields\Help\Help;
 use Digitalazgroup\PlainText\PlainText;
 use DigitalCreative\InlineMorphTo\InlineMorphTo;
@@ -26,13 +26,13 @@ use Saumini\Count\RelationshipCount;
 use OptimistDigital\NovaSortable\Traits\HasSortableRows;
 
 
-use function NovaBI\NovaDataboards\Helpers\Files\getClassesList;
+use function Marispro\NovaDashboardManager\Helpers\Files\getClassesList;
 
 
 class Datawidget extends Resource
 {
 
-    public static $displayInNavigation = false;
+//    public static $displayInNavigation = false;
 
     use HasInlineMorphToFields;
 
@@ -52,7 +52,7 @@ class Datawidget extends Resource
      *
      * @var  string
      */
-    public static $model = \NovaBI\NovaDataboards\Models\Datawidget::class;
+    public static $model = \Marispro\NovaDashboardManager\Models\Datawidget::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -101,13 +101,13 @@ class Datawidget extends Resource
     public function fields(Request $request)
     {
         /*
-        $loadPath = base_path(config('nova-databoards.path') . 'Nova/Datametricables');
+        $loadPath = base_path(config('nova-dashboard-manager.path') . 'Nova/Datametricables');
         $datametricables = $this->loadMorphables($loadPath);
         $datametricables = array_filter($datametricables, function ($metricable) {
             return class_basename($metricable) != 'BaseMetric';
         });
 */
-        $datametricables = config('nova-databoards.datametricables.resources');
+        $datametricables = config('nova-dashboard-manager.datametricables.resources');
 
 //dd($datametricables);
         $fields = [
@@ -136,10 +136,10 @@ class Datawidget extends Resource
                 ],
                 $fields,
                 [
-                    RelationshipCount::make('Databoards', 'Databoards')->onlyOnIndex(),
+                    RelationshipCount::make('Dashboard', 'Dashboard')->onlyOnIndex(),
                     (new Tabs('Relations', [
                         'Databoards' => [
-                            BelongsToMany::make(__('Databoards'), 'Databoards', DataboardConfiguration::class)->rules('required')
+                            BelongsToMany::make(__('Dashboard'), 'Dashboard', DashboardConfiguration::class)->rules('required')
 
                         ]
                     ]))->defaultSearch(true),
@@ -199,12 +199,12 @@ class Datawidget extends Resource
      */
     public static function uriKey()
     {
-        return 'databoard-widgets';
+        return 'dashboard-widgets';
     }
 
 
     public static function availableForNavigation(Request $request)
     {
-        return (config('nova-databoards.showToolMenu') === false);
+        return (config('nova-dashboard-manager.showToolMenu') === false);
     }
 }

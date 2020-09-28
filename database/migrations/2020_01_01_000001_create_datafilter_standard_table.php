@@ -2,12 +2,14 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Str;
+
 
 class CreateDatafilterStandardTable extends Migration {
 
 	public function up()
 	{
-		Schema::create('datafilter_standard', function(Blueprint $table) {
+		Schema::create($this->tableName(), function(Blueprint $table) {
 			$table->increments('id');
             $table->schemalessAttributes('extra_attributes');
 			$table->timestamps();
@@ -16,6 +18,11 @@ class CreateDatafilterStandardTable extends Migration {
 
 	public function down()
 	{
-		Schema::drop('datafilter_standard');
+		Schema::drop($this->tableName());
 	}
+
+    public function tableName()
+    {
+        return Str::singular(config('nova-dashboard-manager.tables.filters')) . '_standard';
+    }
 }

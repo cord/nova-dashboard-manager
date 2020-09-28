@@ -8,7 +8,7 @@ class CreateDatawidgetsTable extends Migration
 
     public function up()
     {
-        Schema::create('datawidgets', function (Blueprint $table) {
+        Schema::create(config('nova-dashboard-manager.tables.widgets'), function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->text('description')->nullable();
@@ -22,6 +22,7 @@ class CreateDatawidgetsTable extends Migration
 
     public function down()
     {
-        Schema::drop('datawidgets');
+        Schema::drop(config('nova-dashboard-manager.tables.widgets'));
     }
+
 }

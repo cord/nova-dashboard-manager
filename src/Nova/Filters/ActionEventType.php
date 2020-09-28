@@ -1,6 +1,6 @@
 <?php
 
-namespace NovaBI\NovaDataboards\Nova\Filters;
+namespace Marispro\NovaDashboardManager\Nova\Filters;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Actions\ActionEvent;

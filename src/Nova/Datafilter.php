@@ -4,9 +4,7 @@ namespace Marispro\NovaDashboardManager\Nova;
 
 use Laravel\Nova\Resource;
 
-use NovaBI\NovaDataboards\Nova\Datametricables\myMetric;
-use NovaBI\NovaDataboards\Nova\Datavisualables\Value;
-use NovaBI\NovaDataboards\Traits\LoadMorphablesTrait;
+use Marispro\NovaDashboardManager\Traits\LoadMorphablesTrait;
 use Comodolab\Nova\Fields\Help\Help;
 use Digitalazgroup\PlainText\PlainText;
 use DigitalCreative\InlineMorphTo\InlineMorphTo;
@@ -26,7 +24,7 @@ use Saumini\Count\RelationshipCount;
 use OptimistDigital\NovaSortable\Traits\HasSortableRows;
 
 
-use function NovaBI\NovaDataboards\Helpers\Files\getClassesList;
+use function Marispro\NovaDashboardManager\Helpers\Files\getClassesList;
 
 
 class Datafilter extends Resource
@@ -52,7 +50,7 @@ class Datafilter extends Resource
      *
      * @var  string
      */
-    public static $model = \NovaBI\NovaDataboards\Models\Datafilter::class;
+    public static $model = \Marispro\NovaDashboardManager\Models\Datafilter::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -100,16 +98,12 @@ class Datafilter extends Resource
      */
     public function fields(Request $request)
     {
-        /*
-        $loadPath = base_path(config('nova-databoards.path') . 'Nova/Datametricables');
-        $datametricables = $this->loadMorphables($loadPath);
-        $datametricables = array_filter($datametricables, function ($metricable) {
-            return class_basename($metricable) != 'BaseMetric';
-        });
-*/
-        $datafilterables = config('nova-databoards.datafilterables.resources');
 
-//dd($datametricables);
+
+        $datafilterables = config('nova-dashboard-manager.datafilterables.resources');
+
+//        dd($datafilterables);
+
         $fields = [
             InlineMorphTo::make(__('Datafilter'), 'filterable')
                 ->types($datafilterables)
@@ -133,10 +127,9 @@ class Datafilter extends Resource
                 ],
                 $fields,
                 [
-                    RelationshipCount::make('Databoards', 'Databoards')->onlyOnIndex(),
                     (new Tabs('Relations', [
-                        'Databoards' => [
-                            BelongsToMany::make(__('Databoards'), 'Databoards', DataboardConfiguration::class)->rules('required')
+                        'Dashboard' => [
+                            BelongsToMany::make(__('Dashboard'), 'Dashboard', DashboardConfiguration::class)->rules('required')
 
                         ]
                     ]))->defaultSearch(true),
@@ -196,12 +189,12 @@ class Datafilter extends Resource
      */
     public static function uriKey()
     {
-        return 'databoard-filters';
+        return 'dashboard-filters';
     }
 
 
     public static function availableForNavigation(Request $request)
     {
-        return (config('nova-databoards.showToolMenu') === false);
+        return (config('nova-dashboard-manager.showToolMenu') === false);
     }
 }

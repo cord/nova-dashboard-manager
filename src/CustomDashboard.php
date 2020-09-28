@@ -4,12 +4,11 @@ namespace Marispro\NovaDashboardManager;
 
 use DigitalCreative\NovaDashboard\Dashboard;
 use Illuminate\Support\Str;
-use Marispro\NovaDashboardManager\Models\Dashboards;
 use Marispro\NovaDashboardManager\Views\CustomView;
-use Marispro\NovaDashboardManager\Models\Dashboards as DashboardModel;
+use Marispro\NovaDashboardManager\Models\Dashboard as DashboardModel;
 use Nemrutco\NovaGlobalFilter\NovaGlobalFilter;
-use NovaBI\NovaDataboards\Models\Datafilter;
-use NovaBI\NovaDataboards\Nova\Databoard;
+use Marispro\NovaDashboardManager\Models\Datafilter;
+use Marispro\NovaDashboardManager\Nova\Databoard;
 
 class CustomDashboard extends Dashboard
 {
@@ -24,7 +23,7 @@ class CustomDashboard extends Dashboard
         $this->model = $dashboards;
     }
 
-    public static string $title = 'Custom Dashboardd';
+    public static string $title = 'Custom Dashboard';
 
     public static function humanize($value = null): string
     {
@@ -71,11 +70,13 @@ class CustomDashboard extends Dashboard
         //dd(Datafilter::whereFilterableId($this->model->id)->first()->filterable);
 
         $filterCards = [];
-        $databoard = \NovaBI\NovaDataboards\Models\Databoard::find($this->model->id);
+        $databoard = \Marispro\NovaDashboardManager\Models\Dashboard::find($this->model->id);
+
         // collect data filters
         $databoard->datafilters->each(function ($datafilter, $key) use (&$filterCards) {
             $filterCards[] = (new $datafilter->filterable->filter)->withMeta([]);
         });
+//        dd($databoard);
 
 
 
@@ -84,8 +85,8 @@ class CustomDashboard extends Dashboard
         //dd($filterCards);
         //return array_merge($headerCards, $filterPanel, $widgetCards);
         return [
-            new CustomView($this->model),
-            //CustomView::make()->editable()
+//            new CustomView($this->model),
+            CustomView::make($this->model)->editable()
                 //->filters($filterCards)
         ];
     }

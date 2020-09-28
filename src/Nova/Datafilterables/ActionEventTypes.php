@@ -1,6 +1,6 @@
 <?php
 
-namespace NovaBI\NovaDataboards\Nova\Datafilterables;
+namespace Marispro\NovaDashboardManager\Nova\Datafilterables;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Date;
@@ -12,7 +12,7 @@ class ActionEventTypes extends BaseFilter
      *
      * @var  string
      */
-    public static $model = \NovaBI\NovaDataboards\Models\Datafilterables\ActionEventTypes::class;
+    public static $model = \Marispro\NovaDashboardManager\Models\Datafilterables\ActionEventTypes::class;
 
     /**
      * Get the fields displayed by the resource.

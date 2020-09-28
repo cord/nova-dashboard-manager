@@ -13,7 +13,6 @@
     "prefer-stable": true,
     "require": {
         "php": ">=7.4.0",
-        "nova-bi/nova-databoards": "*",
         "digital-creative/nova-dashboard": "*"
     },
     "extra": {
@@ -27,5 +26,8 @@
         "psr-4": {
             "Marispro\\NovaDashboardManager\\": "src/"
         }
+    },
+    "config": {
+        "sort-packages": true
     }
 }
