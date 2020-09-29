@@ -8,6 +8,7 @@ use DigitalCreative\NovaDashboard\Examples\Widgets\ExampleWidgetOne;
 use DigitalCreative\NovaDashboard\View;
 use DigitalCreative\NovaDashboard\Widget;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Marispro\NovaDashboardManager\Models\Dashboard as DashboardModel;
 
 class CustomView extends View
@@ -18,7 +19,7 @@ class CustomView extends View
     {
         //$this->dashboard = $dashboard;
         // todo: remove duplicated query. Can be done after merging with nova-bi. Need to move all morphable models to nova-dashboard-manager
-        $this->databoard = \Marispro\NovaDashboardManager\Models\Databoard::find($dashboard->id);
+        $this->databoard = \Marispro\NovaDashboardManager\Models\Dashboard::find($dashboard->id);
     }
 
     // not used
@@ -66,7 +67,15 @@ class CustomView extends View
             'meta' => $this->meta(),
         ];
     }
-
+    /**
+     * Get the URI key for the resource.
+     *
+     * @return string
+     */
+    public function uriKey(): string
+    {
+        return 'view-' . $this->databoard->id . '-default';
+    }
 
     public function filters(): array
     {
@@ -95,8 +104,8 @@ class CustomView extends View
                 $datawidget->metricable->visualable->getVisualisation(
                     [
                         'title' => $datawidget->name,
-                        'metric' => $datawidget->metricable
-
+                        'metric' => $datawidget->metricable,
+                        'uriKey' => 'visual-'. $datawidget->id
                     ]
                 );
 //                ->width($datawidget->metricable->visualable->cardWidth)
@@ -106,11 +115,6 @@ class CustomView extends View
 
 //        dd($widgets);
         return $widgets;
-        /* TODO: Need help to change instance type (again..)
-         * Argument 1 passed to DigitalCreative\NovaDashboard\View::DigitalCreative\NovaDashboard\{closure}() must be an instance of DigitalCreative\NovaDashboard\Widget, instance of Marispro\NovaDashboardManager\Models\Datavisualables\Visuals\Value given
-         */
-
-        return [];
     }
 
 }

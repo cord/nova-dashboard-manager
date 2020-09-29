@@ -6,6 +6,7 @@ use DigitalCreative\NovaDashboard\Filters;
 use DigitalCreative\ValueWidget\Widgets\ValueResult;
 use DigitalCreative\ValueWidget\Widgets\ValueWidget;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Marispro\NovaDashboardManager\Traits\DynamicMetricsTrait;
 use Illuminate\Http\Request;
 use Nemrutco\NovaGlobalFilter\GlobalFilterable;
@@ -62,5 +63,10 @@ class Value extends ValueWidget
 
 //        dd($this->meta);
         return 'my Title in dropdown';
+    }
+
+    public function uriKey(): string
+    {
+        return $this->meta('uriKey');
     }
 }

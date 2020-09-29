@@ -70,7 +70,6 @@ class DashboardManager extends NovaDashboard
 
     public function getCurrentActiveDashboard(string $dashboardKey): ?Dashboard
     {
-
         /**
          * @var Dashboard $dashboard
          */

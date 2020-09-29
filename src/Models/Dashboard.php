@@ -76,10 +76,12 @@ class Dashboard extends Model implements Sortable
     }
 
 
+    // not used?
+
     public function setDashboard(string $dashboardKey): self
     {
+        dd('\Marispro\NovaDashboardManager\Models\Dashboard::setDashboard - not used?');
         $this->dashboardKey = $dashboardKey;
-
         return $this;
     }
 
