@@ -37,7 +37,7 @@ class Datawidget extends Model implements Sortable
     {
         return $this->belongsToMany(Dashboard::class,
             Str::singular(config('nova-dashboard-manager.tables.dashboards')) . '_' . Str::singular(config('nova-dashboard-manager.tables.widgets'))
-        )->orderBy(config('nova-dashboard-manager.tables.widgets').'.sort_order', 'asc');
+        )->orderBy(config('nova-dashboard-manager.tables.dashboards').'.sort_order', 'asc');
 
     }
 

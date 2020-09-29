@@ -24,7 +24,7 @@ Add to the tools() methods like this:
 public function tools()
 {
     return [
-        new DashboardManager(),
+        new DashboardManager(), // must be loaded first !!!
         new NovaDataboards(),
     ];
 }

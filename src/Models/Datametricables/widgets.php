@@ -36,6 +36,10 @@ class widgets extends BaseDatametricable
 
     public function calculate(Collection $options, Filters $filters, $visual)
     {
+
+        return 23;
+
+
         switch ($this->visualable_type) {
             case \Marispro\NovaDashboardManager\Models\Datavisualables\Value::class :
                 /**

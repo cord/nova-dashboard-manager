@@ -60,9 +60,7 @@ class Value extends ValueWidget
      */
     public function title(): string
     {
-
-//        dd($this->meta);
-        return 'my Title in dropdown';
+        return $this->meta('title');
     }
 
     public function uriKey(): string
