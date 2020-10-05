@@ -23,24 +23,18 @@ class Value extends ValueWidget
     /**
      * Calculate the value of the metric.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return mixed
      */
 
-    public function metricCalculate(Collection $options, Filters $filters, $visual) {
-//        dd($this->meta['metric']);
-         return $this->meta['metric']->calculate($options, $filters, $visual);
-     }
 
     public function resolveValue(Collection $options, Filters $filters): ValueResult
     {
-
-        $current = $this->metricCalculate($options, $filters, $this);
-
+        $result = $this->meta['metric']->calculate($options, $filters);
 
         return ValueResult::make()
-                          ->currentValue($current)
-                          ->previousValue(10);
+            ->currentValue($result['currentValue'])
+            ->previousValue($result['previousValue']);
     }
 
 
@@ -49,10 +43,12 @@ class Value extends ValueWidget
      *
      * @return string
      */
-    public static function label(): string
+    public function label(): string
     {
         return 'my label';
     }
+
+
     /**
      * Get the displayable label of the resource.
      *

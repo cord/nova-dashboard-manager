@@ -1,5 +1,5 @@
 <?php
-namespace App\Nova\Filters;
+namespace Marispro\NovaDashboardManager\Nova\Filters;
 
 use Ampeco\Filters\DateRangeFilter;
 use Illuminate\Http\Request;

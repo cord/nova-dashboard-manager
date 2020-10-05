@@ -11,7 +11,6 @@ use Laravel\Nova\Fields\Select;
 class BaseVisual extends Resource
 {
     use LoadMorphablesTrait;
-
     use HasInlineMorphToFields;
 
     public static $displayInNavigation = false;
@@ -60,9 +59,12 @@ class BaseVisual extends Resource
         return array_merge(
             $this->visualFields($request),
             [
+                // add default settings
+                /*
                 Select::make(__('Width'), 'card_width')->options($cardWidthOptions)->displayUsingLabels()
                     ->rules('required')
                     ->default('1/3')
+                */
             ]
         );
     }

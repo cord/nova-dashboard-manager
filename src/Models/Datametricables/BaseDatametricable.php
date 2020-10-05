@@ -57,29 +57,11 @@ class BaseDatametricable extends Model
     }
 
 
-    public function calculate(Collection $options, Filters $filters, $visual)
+    public function calculate(Collection $options, Filters $filters)
     {
 
         switch ($this->visualable_type) {
             case \Marispro\NovaDashboardManager\Models\Datavisualables\Value::class :
-                /**
-                 * @var $visual \Laravel\Nova\Metrics\Value
-                 */
-
-                $filteredModel = $visual->globalFiltered((new Datawidget)->newQuery(), [
-                    DateRangeDefined::class // DateFilter
-                ]);
-
-                // use internal methods
-                //  return $visual->count($request, $filteredModel)->suffix('Widgets');
-
-                // calculation
-                return $visual
-                    ->result($filteredModel->count())
-                    ->previous((new Datawidget)->count() / 2, 'All')
-                    ->prefix('Widgets ')
-                    ->suffix('for fun')->withoutSuffixInflection()
-                    ;
 
                 break;
 
@@ -98,4 +80,38 @@ class BaseDatametricable extends Model
                 break;
         }
     }
+
+    public function previousDateRange($range, $timezone)
+    {
+        if ($range == 'TODAY') {
+            return [
+                now($timezone)->modify('yesterday')->setTime(0, 0),
+                now($timezone)->subDays(1),
+            ];
+        }
+
+        if ($range == 'MTD') {
+            return [
+                now($timezone)->modify('first day of previous month')->setTime(0, 0),
+                now($timezone)->subMonthsNoOverflow(1),
+            ];
+        }
+
+        if ($range == 'QTD') {
+            return $this->previousQuarterRange($timezone);
+        }
+
+        if ($range == 'YTD') {
+            return [
+                now($timezone)->subYears(1)->firstOfYear()->setTime(0, 0),
+                now($timezone)->subYearsNoOverflow(1),
+            ];
+        }
+
+        return [
+            now($timezone)->subDays($range * 2),
+            now($timezone)->subDays($range),
+        ];
+    }
+
 }

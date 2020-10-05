@@ -44,8 +44,9 @@ return [
         'default' => 'todo',
 
         'resources' => [
-            \Marispro\NovaDashboardManager\Nova\Datafilterables\DateFrom::class,
-            \Marispro\NovaDashboardManager\Nova\Datafilterables\DateTo::class,
+//            \Marispro\NovaDashboardManager\Nova\Datafilterables\DateFrom::class,
+//            \Marispro\NovaDashboardManager\Nova\Datafilterables\DateTo::class,
+            \Marispro\NovaDashboardManager\Nova\Datafilterables\DateRange::class,
             \Marispro\NovaDashboardManager\Nova\Datafilterables\ActionEventTypes::class,
 
         ],
@@ -83,12 +84,12 @@ return [
         /*
          * by using names you can later re-configure the visualisation for e.g. "Value" when there are new visualisation types available
          * in you metricable the types can be limit with short-names:
-         *      var $visualisationTypes = ['Value', 'Trend'];
+         *      var $visualisationTypes = ['Value', 'LineChart'];
          */
         'resources' => [
             'Value' => \Marispro\NovaDashboardManager\Nova\Datavisualables\Value::class,
-//            'Trend' => \Marispro\NovaDashboardManager\Nova\Datavisualables\Trend::class,
-//            'Partition' => \Marispro\NovaDashboardManager\Nova\Datavisualables\Partition::class
+            'LineChart' => \Marispro\NovaDashboardManager\Nova\Datavisualables\LineChart::class,
+            'BarChart' => \Marispro\NovaDashboardManager\Nova\Datavisualables\BarChart::class,
         ],
 
         // TODO: load all resources from these paths

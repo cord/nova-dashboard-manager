@@ -93,7 +93,7 @@ class BaseMetric extends Resource
 
         $datavisualables = config('nova-dashboard-manager.datavisualables.resources');
         $datavisualables = array_filter($datavisualables, function ($visual) {
-            return in_array(class_basename($visual), $this->newModel()->getVisualisationTypes());
+            return in_array(class_basename($visual), array_keys($this->newModel()->getVisualisationTypes()));
         });
 
 

@@ -34,7 +34,7 @@ class widgets extends BaseDatametricable
         $this->extra_attributes->widget_metric_option = $value;
     }
 
-    public function calculate(Collection $options, Filters $filters, $visual)
+    public function calculate(Collection $options, Filters $filters)
     {
 
         return 23;

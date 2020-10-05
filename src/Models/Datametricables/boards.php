@@ -3,6 +3,8 @@
 namespace Marispro\NovaDashboardManager\Models\Datametricables;
 use DigitalCreative\NovaDashboard\Filters;
 use Illuminate\Support\Collection;
+use Marispro\NovaDashboardManager\Calculations\BoardCalculation;
+use Marispro\NovaDashboardManager\Calculations\UserCalculation;
 use Marispro\NovaDashboardManager\Models\Dashboard;
 use Marispro\NovaDashboardManager\Nova\Filters\DateFilterFrom;
 use Marispro\NovaDashboardManager\Nova\Filters\DateFilterTo;
@@ -34,33 +36,21 @@ class boards extends BaseDatametricable
     }
 
 
-    public function calculate(Collection $options, Filters $filters, $visual)
+    public function calculate(Collection $options, Filters $filters)
     {
-
-        return 23;
-
 
         switch ($this->visualable_type) {
             case \Marispro\NovaDashboardManager\Models\Datavisualables\Value::class :
-                /**
-                 * @var $visual \Laravel\Nova\Metrics\Value
-                 */
-                $request->range = 365 * 100; // otherwise null?
 
-                $filteredModel = $visual->globalFiltered((new Databoard)->newQuery(), [
-                    DateFilterFrom::class,
-                    DateFilterTo::class,
-                ]);
+                $calcuation = BoardCalculation::make();
 
-                // use internal methods
-                return $visual->count($request, $filteredModel)->suffix('Boards');
+                $query = $calcuation->query();
 
-                // calculation
-                return $visual
-                    ->result($filteredModel->count())
-                    ->previous((new Databoard)->count() / 2, 'All')
-                    ->prefix('Boards ')
-                    ->suffix('for fun')->withoutSuffixInflection();
+                return [
+                    'currentValue' => $query->get()->count(),
+                    'previousValue' => $query->get()->count()
+                ];
+
 
                 break;
 

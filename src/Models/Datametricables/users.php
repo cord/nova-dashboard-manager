@@ -3,12 +3,18 @@
 namespace Marispro\NovaDashboardManager\Models\Datametricables;
 
 
+use DigitalCreative\NovaDashboard\Examples\Filters\Category;
+use DigitalCreative\NovaDashboard\Examples\Filters\Date;
+use DigitalCreative\NovaDashboard\Examples\Filters\Quantity;
 use DigitalCreative\NovaDashboard\Filters;
 use Illuminate\Support\Collection;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Marispro\NovaDashboardManager\Calculations\UserCalculation;
 use Marispro\NovaDashboardManager\Nova\Filters\DateFilterFrom;
 use Marispro\NovaDashboardManager\Nova\Filters\DateFilterTo;
 use App\User;
 use Illuminate\Http\Request;
+use Marispro\NovaDashboardManager\Nova\Filters\DateRangeDefined;
 
 class users extends BaseDatametricable
 {
@@ -18,8 +24,9 @@ class users extends BaseDatametricable
      */
 
     var $visualisationTypes = [
-        'Value',
-        'Trend'
+        'Value' => 'Number of Users',
+        'LineChart' => 'Linechart-Trend of Users',
+        'BarChart' => 'Barchart-Trend of Users'
 
 //        , 'Partition' // Bug in Nova https://github.com/laravel/nova-issues/issues/2681
 
@@ -42,7 +49,7 @@ class users extends BaseDatametricable
     }
 
 
-    public function calculate(Collection $options, Filters $filters, $visual)
+    public function calculate(Collection $options, Filters $filters)
     {
 
 
@@ -51,28 +58,47 @@ class users extends BaseDatametricable
 //        dd($this->visualable_type);
 
 
-        return 42.42;
         switch ($this->visualable_type) {
             case \Marispro\NovaDashboardManager\Models\Datavisualables\Value::class :
-                /**
-                 * @var $visual \Laravel\Nova\Metrics\Value
-                 */
-                $request->range = 365 * 100; // otherwise null?
+                
+                $calcuation = UserCalculation::make();
 
-                $filteredModel = $visual->globalFiltered((new User)->newQuery(), [
-                    DateFilterFrom::class,
-                    DateFilterTo::class,
-                ]);
-
-                $prefix = '';
                 if ($this->only_verified_email) {
-                    $filteredModel->whereNotNull('email_verified_at');
-                    $prefix = 'verified ';
+                    $calcuation = $calcuation->verified();
+                } else {
+                    $calcuation = $calcuation;
                 }
 
+                // option 1
+                // get filter values and calculate result
+                $dateValue = $filters->getFilterValue(DateRangeDefined::class);
+
+                $query = $calcuation->query();
+
+//                $query = $calcuation->applyFilter($query, DateRangeDefined::class);
+                
+
+//                $quantityValue = $filters->getFilterValue(Quantity::class);
+//                $vategoryValue = $filters->getFilterValue(Category::class);
+
+                
+//                $this->previousDateRange();
+
+                // option 2
+                // use ->applyToQueryBuilder
+                $filteredQuery = $filters->applyToQueryBuilder($query);
+
+
+                $prefix = '';
+
+
+                return [
+                    'currentValue' => $filteredQuery->get()->count(),
+                    'previousValue' => $filteredQuery->get()->count()
+                ];
 
                 // use internal methods
-                return $visual->count($request, $filteredModel)->suffix($prefix . 'Users');
+//                return $visual->count($request, $filteredModel)->suffix($prefix . 'Users');
 
                 // calculation
                 /*
@@ -84,7 +110,7 @@ class users extends BaseDatametricable
                 */
                 break;
 
-            case \Marispro\NovaDashboardManager\Models\Datavisualables\Trend::class :
+            case \Marispro\NovaDashboardManager\Models\Datavisualables\LineChart::class :
                 /**
                  * @var $visual \Laravel\Nova\Metrics\Trend
                  */

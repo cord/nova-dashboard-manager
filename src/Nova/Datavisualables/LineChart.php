@@ -7,19 +7,19 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
 
 
-class Partition extends BaseVisual
+class LineChart extends BaseVisual
 {
     /**
      * @var int sort order of morphables
      */
-    public static $sort_order = 2;
+    public static $sort_order = 1;
 
     /**
      * The model the resource corresponds to.
      *
      * @var  string
      */
-    public static $model = \Marispro\NovaDashboardManager\Models\Datavisualables\Partition::class;
+    public static $model = \Marispro\NovaDashboardManager\Models\Datavisualables\LineChart::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -36,25 +36,15 @@ class Partition extends BaseVisual
     public static $search = [];
 
     /**
-     * Get the displayable label of the resource.
-     *
-     * @return  string
-     */
-    public static function label()
-    {
-        return __('Partition');
-    }
-
-    /**
      * Get the displayable singular label of the resource.
      *
      * @return  string
      */
-    public static function singularLabel()
-    {
-        return __('Partition');
-    }
+    public function dynamicLabel() {
 
+        return __('LineChart Widget');
+    }
+    
     /**
      * Get the fields displayed by the resource.
      *
@@ -63,8 +53,6 @@ class Partition extends BaseVisual
      */
     public function visualFields(Request $request)
     {
-        return [
-            Text::make(__('my First Value'), 'my_first_value'),
-        ];
+        return [];
     }
 }

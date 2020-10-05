@@ -75,17 +75,26 @@ class CustomDashboard extends Dashboard
          * Here you have access to $this->model ... so you can build any custom view dynamically...
          * you can also pass the same model down to the custom views to build the widgets dynamically too
          */
+
+        // closure: ->editable(fn() => false);
         return [
             CustomView::make($this->model)->editable()
         ];
     }
 
+    // todo
+    // make configurable
+    // https://vue-responsive-dash.netlify.app/api/#props
     public function options(): array
     {
         return [
             'expandFilterByDefault' => true,
             'grid' => [
+//                'breakpoint' => 'sm',
                 'compact' => true,
+//                'numberOfCols' => 3,
+//                'colWidth' => 300,
+//                'rowHeight' => 300
             ]
         ];
     }

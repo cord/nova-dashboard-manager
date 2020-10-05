@@ -35,7 +35,7 @@ class actionEvents extends BaseDatametricable
         $this->extra_attributes->action_events_metric = $value;
     }
 
-    public function calculate(Collection $options, Filters $filters, $visual)
+    public function calculate(Collection $options, Filters $filters)
     {
         switch ($this->visualable_type) {
             case \Marispro\NovaDashboardManager\Models\Datavisualables\Value::class :

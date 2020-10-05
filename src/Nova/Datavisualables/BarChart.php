@@ -7,18 +7,19 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
 
 
-class Trend extends BaseVisual
+class BarChart extends BaseVisual
 {
     /**
      * @var int sort order of morphables
      */
-    public static $sort_order = 3;
+    public static $sort_order = 1;
+
     /**
      * The model the resource corresponds to.
      *
      * @var  string
      */
-    public static $model = \Marispro\NovaDashboardManager\Models\Datavisualables\Trend::class;
+    public static $model = \Marispro\NovaDashboardManager\Models\Datavisualables\BarChart::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -35,25 +36,14 @@ class Trend extends BaseVisual
     public static $search = [];
 
     /**
-     * Get the displayable label of the resource.
-     *
-     * @return  string
-     */
-    public static function label()
-    {
-        return __('Trend');
-    }
-
-    /**
      * Get the displayable singular label of the resource.
      *
      * @return  string
      */
-    public static function singularLabel()
-    {
-        return __('Trend');
-    }
+    public function dynamicLabel() {
 
+        return __('BarChart Widget');
+    }
     /**
      * Get the fields displayed by the resource.
      *
@@ -62,9 +52,6 @@ class Trend extends BaseVisual
      */
     public function visualFields(Request $request)
     {
-        return [
-            Text::make(__('my First Value'), 'my_first_value'),
-            Text::make(__('my Second Value'), 'my_second_value'),
-        ];
+        return [];
     }
 }

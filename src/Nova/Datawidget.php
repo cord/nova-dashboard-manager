@@ -115,7 +115,7 @@ class Datawidget extends Resource
                 ->types($datametricables)
                 ->default(''),
             Text::make(__('Visual'), 'visualable', function () {
-                return $this->visualable->visual;
+                return class_basename($this->visualable->visual);
             })->hideWhenCreating()->hideWhenUpdating(),
         ];
 

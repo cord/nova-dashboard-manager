@@ -35,24 +35,15 @@ class Value extends BaseVisual
      */
     public static $search = [];
 
-    /**
-     * Get the displayable label of the resource.
-     *
-     * @return  string
-     */
-    public static function label()
-    {
-        return __('Value');
-    }
 
     /**
      * Get the displayable singular label of the resource.
      *
      * @return  string
      */
-    public static function singularLabel()
-    {
-        return __('Value');
+    public function dynamicLabel() {
+
+        return __('Value Widget');
     }
 
     /**
