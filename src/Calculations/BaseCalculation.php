@@ -36,17 +36,17 @@ abstract class BaseCalculation
 
     abstract public function newQuery();
 
-    public function applyFilter($query, $filter) {
+    public function applyFilter($filters, $filterClass, $options = [])
+    {
+        $builder = $this->query;
 
-//        static function (ApplyFilter $applyFilter) use ($query) {
-//            $applyFilter->filter->apply(resolve(NovaRequest::class), $builder, $applyFilter->value);
-//        })
-
-        $applyFilter = (new $filter);
-
-        $query = $applyFilter->apply(resolve(NovaRequest::class), $query, $applyFilter->value);
-        dd($query);
-
-        return $query;
+        return tap($this->query, function (Builder $builder) use ($filters, $filterClass, $options) {
+            $filters->filters()
+                ->each(static function (ApplyFilter $applyFilter) use ($builder, $filterClass, $options) {
+                    if (get_class($applyFilter->filter) == $filterClass) {
+                        $applyFilter->filter->withMeta($options)->apply(resolve(NovaRequest::class), $builder, $applyFilter->value);
+                    }
+                });
+        });
     }
 }

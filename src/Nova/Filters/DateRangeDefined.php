@@ -39,10 +39,12 @@ class DateRangeDefined extends DateFilter
     public function apply(Request $request, $query, $value)
     {
         $timezone = Nova::resolveUserTimezone($request) ?? $request->timezone;
-        return $query->whereBetween($query->getModel()->getCreatedAtColumn(),
-            $this->currentRange($value, $timezone));
 
-        return $query->where('created_at', '<=', Carbon::parse($value));
+        $dateColumn = $query->getModel()->getCreatedAtColumn();
+        if (isset($this->meta()['dateColumn'])) {
+            $dateColumn = $this->meta()['dateColumn'] ?: $dateColumn;
+        }
+        return $query->whereBetween($dateColumn, $this->currentRange($value, $timezone));
     }
 
     /**

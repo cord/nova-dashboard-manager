@@ -73,28 +73,27 @@ class users extends BaseDatametricable
                 // get filter values and calculate result
                 $dateValue = $filters->getFilterValue(DateRangeDefined::class);
 
+
+                $calcuation->applyFilter($filters, DateRangeDefined::class,
+
+//                    ['dateColumn' => 'asdfg']
+                
+                );
+
                 $query = $calcuation->query();
 
-//                $query = $calcuation->applyFilter($query, DateRangeDefined::class);
+
                 
 
 //                $quantityValue = $filters->getFilterValue(Quantity::class);
 //                $vategoryValue = $filters->getFilterValue(Category::class);
 
                 
-//                $this->previousDateRange();
-
-                // option 2
-                // use ->applyToQueryBuilder
-                $filteredQuery = $filters->applyToQueryBuilder($query);
-
-
-                $prefix = '';
 
 
                 return [
-                    'currentValue' => $filteredQuery->get()->count(),
-                    'previousValue' => $filteredQuery->get()->count()
+                    'currentValue' => $query->get()->count(),
+                    'previousValue' => $query->get()->count()
                 ];
 
                 // use internal methods
