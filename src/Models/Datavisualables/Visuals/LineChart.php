@@ -25,18 +25,6 @@ class LineChart extends LineChartWidget
 
     public static $title = 'my LineChartWidget';
 
-    /**
-     * Calculate the value of the metric.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return mixed
-     */
-
-    public function metricCalculate(Collection $options, Filters $filters, $visual)
-    {
-        return $this->meta['metric']->calculate($options, $filters, $visual);
-    }
-
 
     public function getRandomData($min = 0, $max = 100): array
     {
@@ -59,8 +47,8 @@ class LineChart extends LineChartWidget
         /**
          * Some basic stylish settings
          */
-        $dataset1Gradient = new Gradient([ '#bc00dd', '#a100f2', '#540d6e' ]);
-        $dataset2Gradient = new Gradient([ '#8d99ae', '#33415c' ]);
+        $dataset1Gradient = new Gradient(['#bc00dd', '#a100f2', '#540d6e']);
+        $dataset2Gradient = new Gradient(['#8d99ae', '#33415c']);
 
         $style = Style::make();
 
@@ -91,7 +79,22 @@ class LineChart extends LineChartWidget
 
     public function resolveValue(Collection $options, Filters $filters): ValueResult
     {
+        $configuration = Style::make();
 
+
+        $result = $this->meta['metric']->calculate($options, $filters);
+
+        $valueResult = ValueResult::make()
+            ->labels($result['labels']);
+
+        foreach ($result['datasets'] as $label => $dset) {
+            $dataSet = DataSet::make($label, $dset, $configuration);
+            $valueResult->addDataset($dataSet);
+        }
+        return $valueResult;
+
+
+        ///-------------------
         $style = $options->get(self::STYLE);
 
         /**
@@ -104,14 +107,14 @@ class LineChart extends LineChartWidget
             /**
              * You can either use the array syntax or a Gradient object
              */
-            $colorColor = [ '#FAD961', '#F76B1C' ];
-            $backgroundColor = [ '#FAD961', '#F76B1C' ];
+            $colorColor = ['#FAD961', '#F76B1C'];
+            $backgroundColor = ['#FAD961', '#F76B1C'];
             $configuration->pointRadius(0);
 
         } else {
 
             $colorColor = '#005bea';
-            $backgroundColor = [ 'rgba(0, 91, 234,.8)', 'rgba(255,255,255,0)', Gradient::VERTICAL ];
+            $backgroundColor = ['rgba(0, 91, 234,.8)', 'rgba(255,255,255,0)', Gradient::VERTICAL];
 
         }
 
@@ -125,6 +128,7 @@ class LineChart extends LineChartWidget
         return ValueResult::make()
             ->labels($this->getMonthsInTheYear())
             ->addDataset($dataSet);
+
 
     }
 
@@ -143,14 +147,12 @@ class LineChart extends LineChartWidget
     }
 
 
-
-
     /**
      * Get the displayable label of the resource.
      *
      * @return string
      */
-    public  function label(): string
+    public function label(): string
     {
         return 'my label';
     }

@@ -4,13 +4,13 @@ namespace Marispro\NovaDashboardManager\Calculations;
 
 use Illuminate\Database\Eloquent\Builder;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use \Laravel\Nova\Makeable;
+use Laravel\Nova\Makeable;
 use Laravel\Nova\Query\ApplyFilter;
 
-abstract class BaseCalculation
+trait Calculatable
 {
-    use Makeable;
 
+    use Makeable;
 
     /**
      * The element's component.
@@ -28,11 +28,14 @@ abstract class BaseCalculation
         $this->query = $this->newQuery();
     }
 
+    public function __clone() {
+        $this->query = clone $this->query;
+    }
+
     public function query()
     {
         return $this->query;
     }
-
 
     abstract public function newQuery();
 
@@ -40,7 +43,7 @@ abstract class BaseCalculation
     {
         $builder = $this->query;
 
-        return tap($this->query, function (Builder $builder) use ($filters, $filterClass, $options) {
+        $this->query = tap($builder, function (Builder $builder) use ($filters, $filterClass, $options) {
             $filters->filters()
                 ->each(static function (ApplyFilter $applyFilter) use ($builder, $filterClass, $options) {
                     if (get_class($applyFilter->filter) == $filterClass) {
@@ -48,5 +51,6 @@ abstract class BaseCalculation
                     }
                 });
         });
+        return $this;
     }
 }

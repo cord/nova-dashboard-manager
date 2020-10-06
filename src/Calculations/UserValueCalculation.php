@@ -5,7 +5,7 @@ namespace Marispro\NovaDashboardManager\Calculations;
 
 use App\User;
 
-class UserCalculation extends BaseCalculation
+class UserValueCalculation extends BaseValueCalculation
 {
 
     /**

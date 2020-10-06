@@ -54,6 +54,24 @@ class BarChart extends BarChartWidget {
     public function resolveValue(Collection $options, Filters $filters): ValueResult
     {
 
+
+        $configuration = Style::make();
+
+
+        $result = $this->meta['metric']->calculate($options, $filters);
+
+        $valueResult = ValueResult::make()
+            ->labels($result['labels']);
+
+        foreach ($result['datasets'] as $label => $dset) {
+            $dataSet = DataSet::make($label, $dset, $configuration);
+            $valueResult->addDataset($dataSet);
+        }
+        return $valueResult;
+
+
+        ///-------------------
+
         $configuration = BarChatStyle::make()
             ->hoverBackgroundColor('green');
 

@@ -6,7 +6,7 @@ namespace Marispro\NovaDashboardManager\Calculations;
 
 use Marispro\NovaDashboardManager\Models\Dashboard;
 
-class BoardCalculation extends BaseCalculation
+class BoardValueCalculation extends BaseValueCalculation
 {
 
     /**

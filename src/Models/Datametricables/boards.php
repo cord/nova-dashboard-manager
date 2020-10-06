@@ -3,12 +3,12 @@
 namespace Marispro\NovaDashboardManager\Models\Datametricables;
 use DigitalCreative\NovaDashboard\Filters;
 use Illuminate\Support\Collection;
-use Marispro\NovaDashboardManager\Calculations\BoardCalculation;
-use Marispro\NovaDashboardManager\Calculations\UserCalculation;
+use Marispro\NovaDashboardManager\Calculations\BoardValueCalculation;
 use Marispro\NovaDashboardManager\Models\Dashboard;
 use Marispro\NovaDashboardManager\Nova\Filters\DateFilterFrom;
 use Marispro\NovaDashboardManager\Nova\Filters\DateFilterTo;
 use Illuminate\Http\Request;
+use Marispro\NovaDashboardManager\Nova\Filters\DateRangeDefined;
 
 class boards extends BaseDatametricable
 {
@@ -42,13 +42,19 @@ class boards extends BaseDatametricable
         switch ($this->visualable_type) {
             case \Marispro\NovaDashboardManager\Models\Datavisualables\Value::class :
 
-                $calcuation = BoardCalculation::make();
+                $calcuation = BoardValueCalculation::make();
 
-                $query = $calcuation->query();
+                $calcuationCurrentValue = (clone $calcuation)->applyFilter($filters, DateRangeDefined::class,
+                    ['dateColumn' => 'created_at']
+                );
+
+                $calcuationPreviousValue = (clone $calcuation)->applyFilter($filters, DateRangeDefined::class,
+                    ['dateColumn' => 'created_at', 'previousRange' => true]
+                );
 
                 return [
-                    'currentValue' => $query->get()->count(),
-                    'previousValue' => $query->get()->count()
+                    'currentValue' => $calcuationCurrentValue->query()->get()->count(),
+                    'previousValue' => $calcuationPreviousValue->query()->get()->count()
                 ];
 
 

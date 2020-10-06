@@ -9,7 +9,8 @@ use DigitalCreative\NovaDashboard\Examples\Filters\Quantity;
 use DigitalCreative\NovaDashboard\Filters;
 use Illuminate\Support\Collection;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Marispro\NovaDashboardManager\Calculations\UserCalculation;
+use Marispro\NovaDashboardManager\Calculations\UserTrendCalculation;
+use Marispro\NovaDashboardManager\Calculations\UserValueCalculation;
 use Marispro\NovaDashboardManager\Nova\Filters\DateFilterFrom;
 use Marispro\NovaDashboardManager\Nova\Filters\DateFilterTo;
 use App\User;
@@ -60,8 +61,8 @@ class users extends BaseDatametricable
 
         switch ($this->visualable_type) {
             case \Marispro\NovaDashboardManager\Models\Datavisualables\Value::class :
-                
-                $calcuation = UserCalculation::make();
+
+                $calcuation = UserValueCalculation::make();
 
                 if ($this->only_verified_email) {
                     $calcuation = $calcuation->verified();
@@ -71,78 +72,90 @@ class users extends BaseDatametricable
 
                 // option 1
                 // get filter values and calculate result
-                $dateValue = $filters->getFilterValue(DateRangeDefined::class);
+                // $dateValue = $filters->getFilterValue(DateRangeDefined::class);
+
+                // option 2
+                // apply filter with options
+                // $calcuation->applyFilter($filters, DateRangeDefined::class,
+                //     ['dateColumn' => 'created_at']
+                // );
 
 
-                $calcuation->applyFilter($filters, DateRangeDefined::class,
-
-//                    ['dateColumn' => 'asdfg']
-                
+                $calcuationCurrentValue = (clone $calcuation)->applyFilter($filters, DateRangeDefined::class,
+                    ['dateColumn' => 'created_at']
                 );
 
-                $query = $calcuation->query();
+                $calcuationPreviousValue = (clone $calcuation)->applyFilter($filters, DateRangeDefined::class,
+                    ['dateColumn' => 'created_at', 'previousRange' => true]
+                );
 
-
-                
-
-//                $quantityValue = $filters->getFilterValue(Quantity::class);
-//                $vategoryValue = $filters->getFilterValue(Category::class);
-
-                
-
+                // alternativ approach: use Nova Value calculations
+                // $calcuation->count($calcuationCurrentValue->query());
 
                 return [
-                    'currentValue' => $query->get()->count(),
-                    'previousValue' => $query->get()->count()
+                    'currentValue' => $calcuationCurrentValue->query()->get()->count(),
+                    'previousValue' => $calcuationPreviousValue->query()->get()->count()
                 ];
-
-                // use internal methods
-//                return $visual->count($request, $filteredModel)->suffix($prefix . 'Users');
-
-                // calculation
-                /*
-                    return $visual
-                        ->result($filteredModel->count())
-                        ->previous((new User)->count() / 2, 'All')
-                        ->prefix('Boards ')
-                        ->suffix('for fun')->withoutSuffixInflection();
-                */
                 break;
 
             case \Marispro\NovaDashboardManager\Models\Datavisualables\LineChart::class :
-                /**
-                 * @var $visual \Laravel\Nova\Metrics\Trend
-                 */
-                $filteredModel = $visual->globalFiltered((new User)->newQuery(), [
-                    DateFilterFrom::class,
-                    DateFilterTo::class,
-                ]);
-                return $visual->countByDays($request, $filteredModel)->showLatestValue();
+            case \Marispro\NovaDashboardManager\Models\Datavisualables\BarChart::class :
 
-                break;
-            case \Marispro\NovaDashboardManager\Models\Datavisualables\Partition::class :
-                /**
-                 * @var $visual \Laravel\Nova\Metrics\Partition
-                 */
-                $filteredModel = $visual->globalFiltered((new User)->newQuery(), [
-                    DateFilterFrom::class,
-                    DateFilterTo::class,
-                ]);
+                // Using Nova Trend calculations
+                $calcuation = UserTrendCalculation::make();
+                $request = resolve(NovaRequest::class);
 
-                // Bug in Nova
-                // https://github.com/laravel/nova-issues/issues/2681
+                $dateValue = $filters->getFilterValue(DateRangeDefined::class);
 
-                $result = $visual->count($request, User::class, 'email_verified_at')
-                    ->label(function ($value) {
-                        switch ($value) {
-                            case null:
-                                return 'Not verified';
-                            default:
-                                return 'verified';
+                switch ($dateValue) {
+                    case 'ALL':
+                    case '365':
+                    case 'TODAY':
+                    case 'QTD':
+                    case 'YTD':
+
+                        $request->range = 12;
+                        $result = $calcuation->countByMonths($request, $calcuation->query(), 'created_at');
+                        $labels = array_keys($result->trend);
+                        break;
+                    case '30':
+                    case '60':
+                    case 'MTD':
+                        $request->range = $dateValue;
+                        if ($dateValue == 'MTD') {
+                            $request->range = 30;
+                            // todo
+                            $result = $calcuation->countByDays($request, $calcuation->query(), 'created_at');
+                        } else {
+
+                            $result = $calcuation->countByDays($request, $calcuation->query(), 'created_at');
                         }
-                    });
-                return $result;
+                        $labels_raw = array_keys($result->trend);
+                        $first = reset($labels_raw);
+                        $last = end($labels_raw);
+                        $labels = range(0, $request->range);
+                        $labels[0] = $first;
+                        $labels[sizeof($labels) - 1] = $last;
+                        break;
+                    default:
+                        $request->range = 12;
+                        $result = $calcuation->countByMonths($request, $calcuation->query(), 'created_at');
+                        $labels = array_keys($result->trend);
+                        break;
+                }
+
+                $values = array_values($result->trend);
+
+                return [
+                    'labels' => $labels,
+                    'datasets' => [
+                        'Users' => $values,
+                    ]
+                ];
+
+
                 break;
+
         }
     }
 
