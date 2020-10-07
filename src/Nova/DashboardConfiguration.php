@@ -6,6 +6,7 @@ use App\Nova\Situation;
 use Marispro\NovaDashboardManager\Nova\Dashboardables\BaseFilter;
 
 use Laravel\Nova\Resource;
+use Laravel\Nova\Fields\Number;
 
 use Marispro\NovaDashboardManager\Traits\LoadMorphablesTrait;
 
@@ -19,7 +20,6 @@ use DigitalCreative\InlineMorphTo\InlineMorphTo;
 use DigitalCreative\InlineMorphTo\HasInlineMorphToFields;
 use NovaAttachMany\AttachMany;
 use Pdmfc\NovaCards\Info;
-use Saumini\Count\RelationshipCount;
 use OptimistDigital\NovaSortable\Traits\HasSortableRows;
 
 
@@ -142,8 +142,13 @@ class DashboardConfiguration extends Resource
                         ->showCounts()
                         ->help('Select a Widgets to attach')->onlyOnForms(),
 
-                    RelationshipCount::make('Data Widgets', 'datawidgets')->onlyOnIndex(),
-                    RelationshipCount::make('Data Filters', 'datafilters')->onlyOnIndex(),
+                    Number::make(__('Data Widgets'), function () {
+                        return $this->datawidgets->count();
+                    })->onlyOnIndex(),
+
+                    Number::make(__('Data Filters'), function () {
+                        return $this->datafilters->count();
+                    })->onlyOnIndex(),
 
                     (new Tabs('Relations', [
                         'Data Widgets' => [

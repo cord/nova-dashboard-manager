@@ -1,12 +1,12 @@
 <?php
 
 namespace Marispro\NovaDashboardManager\Models\Datametricables;
+
 use DigitalCreative\NovaDashboard\Filters;
 use Illuminate\Support\Collection;
 use Marispro\NovaDashboardManager\Calculations\BoardValueCalculation;
+use Marispro\NovaDashboardManager\Calculations\BoardTrendCalculation;
 use Marispro\NovaDashboardManager\Models\Dashboard;
-use Marispro\NovaDashboardManager\Nova\Filters\DateFilterFrom;
-use Marispro\NovaDashboardManager\Nova\Filters\DateFilterTo;
 use Illuminate\Http\Request;
 use Marispro\NovaDashboardManager\Nova\Filters\DateRangeDefined;
 
@@ -17,7 +17,11 @@ class boards extends BaseDatametricable
      * methode 'calculate' must return a valid calculation
      */
 
-    var $visualisationTypes = ['Value', 'Trend'];
+    var $visualisationTypes = [
+        'Value' => 'Number of Boards',
+        'LineChart' => 'Linechart-Trend of Boards',
+        'BarChart' => 'Barchart-Trend of Boards'
+    ];
 
     public static function getResourceModel()
     {
@@ -60,16 +64,27 @@ class boards extends BaseDatametricable
 
                 break;
 
-            case \Marispro\NovaDashboardManager\Models\Datavisualables\Trend::class :
-                /**
-                 * @var $visual \Laravel\Nova\Metrics\Trend
-                 */
-                $filteredModel = $visual->globalFiltered((new Databoard)->newQuery(), [
-                    DateFilterFrom::class,
-                    DateFilterTo::class,
-                ]);
-                return $visual->countByDays($request, $filteredModel)->showLatestValue();
+            case \Marispro\NovaDashboardManager\Models\Datavisualables\LineChart::class :
+            case \Marispro\NovaDashboardManager\Models\Datavisualables\BarChart::class :
 
+                // Using Nova Trend calculations
+                $calcuation = BoardTrendCalculation::make();
+
+                $dateValue = $filters->getFilterValue(DateRangeDefined::class);
+
+                $result = $this->formatTrendData($dateValue, $calcuation);
+
+    
+                return [
+                    'labels' => $result['labels'],
+                    'datasets' => [
+                        'Boards' => [
+                            'name' => 'Boards',
+                            'data' => $result['values'],
+                            'options' => []
+                        ]
+                    ]
+                ];
                 break;
 
         }

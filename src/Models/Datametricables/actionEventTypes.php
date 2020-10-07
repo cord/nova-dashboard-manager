@@ -6,17 +6,14 @@ namespace Marispro\NovaDashboardManager\Models\Datametricables;
 use DigitalCreative\NovaDashboard\Filters;
 use Illuminate\Support\Collection;
 use Marispro\NovaDashboardManager\Calculations\ActionEventTrendCalculation;
-use Marispro\NovaDashboardManager\Calculations\ActionEventValueCalculation;
-use Marispro\NovaDashboardManager\Calculations\WidgetTrendCalculation;
-use Marispro\NovaDashboardManager\Calculations\WidgetValueCalculation;
+use Marispro\NovaDashboardManager\Calculations\ActionEventTypeTrendCalculation;
+use Marispro\NovaDashboardManager\Calculations\ActionEventTypeValueCalculation;
 use Marispro\NovaDashboardManager\Nova\Filters\ActionEventType;
-use Marispro\NovaDashboardManager\Nova\Filters\DateFilterFrom;
-use Marispro\NovaDashboardManager\Nova\Filters\DateFilterTo;
 use Illuminate\Http\Request;
 use Laravel\Nova\Actions\ActionEvent;
 use Marispro\NovaDashboardManager\Nova\Filters\DateRangeDefined;
 
-class actionEvents extends BaseDatametricable
+class actionEventTypes extends BaseDatametricable
 {
     /*
      * configure supported visualisationTypes
@@ -24,14 +21,14 @@ class actionEvents extends BaseDatametricable
      */
 
     var $visualisationTypes = [
-        'Value' => 'Number of Action Events',
-        'LineChart' => 'Linechart-Trend of Action Events',
-        'BarChart' => 'Barchart-Trend of Action Events'
+        'Value' => 'Number of Action Event Types',
+        'LineChart' => 'Linechart-Trend of Action Event Types',
+        'BarChart' => 'Barchart-Trend of Action Event Types'
     ];
 
     public static function getResourceModel()
     {
-        return \Marispro\NovaDashboardManager\Nova\Datametricables\actionEvents::class;
+        return \Marispro\NovaDashboardManager\Nova\Datametricables\actionEventTypes::class;
     }
 
     public function getActionEventsMetricOptionAttribute()
@@ -50,11 +47,21 @@ class actionEvents extends BaseDatametricable
         switch ($this->visualable_type) {
             case \Marispro\NovaDashboardManager\Models\Datavisualables\Value::class :
 
-                $calcuation = ActionEventValueCalculation::make();
+                $calcuation = ActionEventTypeValueCalculation::make();
+
 
                 $calcuationCurrentValue = (clone $calcuation)->applyFilter($filters, DateRangeDefined::class,
                     ['dateColumn' => 'created_at']
                 );
+
+                $builder = $calcuation->query();
+
+                // get sql:
+//                $query = vsprintf(str_replace(array('?'), array('\'%s\''), $builder->toSql()), $builder->getBindings());
+//                dd($query);
+
+
+//                dd( $calcuation->query()->toSql());
 
                 $calcuationPreviousValue = (clone $calcuation)->applyFilter($filters, DateRangeDefined::class,
                     ['dateColumn' => 'created_at', 'previousRange' => true]
@@ -72,22 +79,39 @@ class actionEvents extends BaseDatametricable
             case \Marispro\NovaDashboardManager\Models\Datavisualables\BarChart::class :
 
                 // Using Nova Trend calculations
-                $calcuation = ActionEventTrendCalculation::make();
+                $calcuation = ActionEventTypeTrendCalculation::make();
 
                 $dateValue = $filters->getFilterValue(DateRangeDefined::class);
 
-                $result = $this->formatTrendData($dateValue, $calcuation);
+                $eventTypes = (new ActionEvent())->newQuery()->select('actionable_type')->distinct()->get()->toArray();
+
+
+                $dataset = [];
+                $labels = null;
+
+                //workaround - could be done in one query
+
+                foreach ($eventTypes as $eventType) {
+                    $typeCalcuation = (clone $calcuation);
+                    $typeCalcuation->query()->where('actionable_type', '=', $eventType['actionable_type']);
+
+                    $data = $this->formatTrendData($dateValue, $typeCalcuation);
+
+                    $dataset[$eventType['actionable_type']] = [
+                        'name' => $eventType['actionable_type'],
+                        'data' => $data['values']
+                    ];
+                    if (!$labels) {
+                        $labels = $data['labels'];
+                    }
+
+                }
 
                 return [
-                    'labels' => $result['labels'],
-                    'datasets' => [
-                        'Action Events' => [
-                            'name' => 'Action Events',
-                            'data' => $result['values'],
-                            'options' => []
-                        ]
-                    ]
+                    'labels' => $labels,
+                    'datasets' => $dataset
                 ];
+
                 break;
 
         }

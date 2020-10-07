@@ -68,6 +68,7 @@ return [
             \Marispro\NovaDashboardManager\Nova\Datametricables\boards::class, // example dashboardable
             \Marispro\NovaDashboardManager\Nova\Datametricables\widgets::class, // example dashboardable
             \Marispro\NovaDashboardManager\Nova\Datametricables\actionEvents::class, // example dashboardable
+            \Marispro\NovaDashboardManager\Nova\Datametricables\actionEventTypes::class, // example dashboardable
         ],
 
         // TODO: load all resources from these paths

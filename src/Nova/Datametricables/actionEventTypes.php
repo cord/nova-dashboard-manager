@@ -7,21 +7,21 @@ use Illuminate\Http\Request;
 
 use Laravel\Nova\Fields\Text;
 
-class widgets extends BaseMetric
+class actionEventTypes extends BaseMetric
 {
     use HasInlineMorphToFields;
 
     /**
      * @var int sort order of morphables
      */
-    public static $sort_order = 3;
+    public static $sort_order = 4;
 
     /**
      * The model the resource corresponds to.
      *
      * @var  string
      */
-    public static $model = \Marispro\NovaDashboardManager\Models\Datametricables\widgets::class;
+    public static $model = \Marispro\NovaDashboardManager\Models\Datametricables\actionEventTypes::class;
 
     /**
      * Get the fields displayed by the resource.

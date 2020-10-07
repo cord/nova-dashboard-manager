@@ -2,6 +2,7 @@
 
 namespace Marispro\NovaDashboardManager\Nova;
 
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Resource;
 
 use Marispro\NovaDashboardManager\Traits\LoadMorphablesTrait;
@@ -20,7 +21,6 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Textarea;
-use Saumini\Count\RelationshipCount;
 use OptimistDigital\NovaSortable\Traits\HasSortableRows;
 
 
@@ -127,6 +127,12 @@ class Datafilter extends Resource
                 ],
                 $fields,
                 [
+
+                    Number::make(__('Dashboard'), function () {
+                        return $this->dashboard->count();
+                    })->onlyOnIndex(),
+
+
                     (new Tabs('Relations', [
                         'Dashboard' => [
                             BelongsToMany::make(__('Dashboard'), 'Dashboard', DashboardConfiguration::class)->rules('required')

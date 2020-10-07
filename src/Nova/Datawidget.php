@@ -2,6 +2,7 @@
 
 namespace Marispro\NovaDashboardManager\Nova;
 
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Resource;
 
 use Marispro\NovaDashboardManager\Nova\Datametricables\myMetric;
@@ -22,7 +23,6 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Textarea;
-use Saumini\Count\RelationshipCount;
 use OptimistDigital\NovaSortable\Traits\HasSortableRows;
 
 
@@ -136,11 +136,14 @@ class Datawidget extends Resource
                 ],
                 $fields,
                 [
-                    RelationshipCount::make('Dashboard', 'Dashboard')->onlyOnIndex(),
+
+                    Number::make(__('Dashboard'), function () {
+                        return $this->dashboard->count();
+                    })->onlyOnIndex(),
+                    
                     (new Tabs('Relations', [
                         'Databoards' => [
                             BelongsToMany::make(__('Dashboard'), 'Dashboard', DashboardConfiguration::class)->rules('required')
-
                         ]
                     ]))->defaultSearch(true),
                 ]

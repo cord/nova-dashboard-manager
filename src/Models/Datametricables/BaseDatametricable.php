@@ -6,6 +6,7 @@ namespace Marispro\NovaDashboardManager\Models\Datametricables;
 use DigitalCreative\NovaDashboard\Filters;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Laravel\Nova\Http\Requests\NovaRequest;
 use Marispro\NovaDashboardManager\Models\Dashboard;
 use Marispro\NovaDashboardManager\Models\Datavisualables\Partition;
 use Marispro\NovaDashboardManager\Models\Datavisualables\Trend;
@@ -60,25 +61,65 @@ class BaseDatametricable extends Model
     public function calculate(Collection $options, Filters $filters)
     {
 
-        switch ($this->visualable_type) {
-            case \Marispro\NovaDashboardManager\Models\Datavisualables\Value::class :
+        return null;
+    }
 
+
+    public function formatTrendData($dateValue, $calcuation)
+    {
+        $request = resolve(NovaRequest::class);
+
+        switch ($dateValue) {
+            case 'ALL':
+            case '365':
+            case 'TODAY':
+            case 'QTD':
+            case 'YTD':
+
+                $request->range = 12;
+                $result = $calcuation->countByMonths($request, $calcuation->query(), 'created_at');
+                $labels = array_keys($result->trend);
                 break;
+            case '30':
+            case '60':
+            case 'MTD':
+                $request->range = $dateValue;
+                if ($dateValue == 'MTD') {
+                    $request->range = 30;
+                    // todo
+                    $result = $calcuation->countByDays($request, $calcuation->query(), 'created_at');
+                } else {
 
-            case \Marispro\NovaDashboardManager\Models\Datavisualables\Trend::class :
+                    $result = $calcuation->countByDays($request, $calcuation->query(), 'created_at');
+                }
+                $labels_raw = array_keys($result->trend);
+                $first = reset($labels_raw);
+                $last = end($labels_raw);
+                $labels = range(0, $request->range);
 
-                /**
-                 * @var $visual \Laravel\Nova\Metrics\Trend
-                 */
-                return (new TrendResult)->trend([
-                    'July 1' => 100,
-                    'July 2' => 75,
-                    'July 3' => 125,
-                    'July 4' => 85,
-                    'July 5' => 150,
-                ]);
+                // set all legend items empty
+                array_walk($labels, function (&$item) {
+                    $item = '';
+                });
+
+                $labels[0] = $first;
+                $labels[sizeof($labels) - 1] = $last;
+                break;
+            default:
+                $request->range = 12;
+                $result = $calcuation->countByMonths($request, $calcuation->query(), 'created_at');
+                $labels = array_keys($result->trend);
                 break;
         }
+
+
+        $values = array_values($result->trend);
+
+        return [
+            'labels' => $labels,
+            'values' => $values
+
+        ];
     }
 
     public function previousDateRange($range, $timezone)

@@ -88,7 +88,7 @@ class LineChart extends LineChartWidget
             ->labels($result['labels']);
 
         foreach ($result['datasets'] as $label => $dset) {
-            $dataSet = DataSet::make($label, $dset, $configuration);
+            $dataSet = DataSet::make($dset['name'], $dset['data'], $configuration);
             $valueResult->addDataset($dataSet);
         }
         return $valueResult;
