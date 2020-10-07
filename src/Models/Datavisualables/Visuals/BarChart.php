@@ -17,48 +17,15 @@ use Marispro\NovaDashboardManager\Traits\DynamicMetricsTrait;
 use Illuminate\Http\Request;
 use Nemrutco\NovaGlobalFilter\GlobalFilterable;
 
-class BarChart extends BarChartWidget {
-//    use DynamicMetricsTrait;
-//    use GlobalFilterable;
+class BarChart extends BarChartWidget
+{
+    use Visuable;
 
-    var $baseUriKey = 'value';
-
-    public static $title = 'my LineChartWidget';
-
-    /**
-     * Calculate the value of the metric.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return mixed
-     */
-
-    public function metricCalculate(Collection $options, Filters $filters, $visual)
-    {
-        return $this->meta['metric']->calculate($options, $filters, $visual);
-    }
-
-    public function getRandomData($min = 1, $max = 100): array
-    {
-        return [
-            random_int($min, $max),
-            random_int($min, $max),
-            random_int($min, $max),
-            random_int($min, $max),
-            random_int($min, $max),
-            random_int($min, $max),
-            random_int($min, $max),
-            random_int($min, $max),
-            random_int($min, $max),
-        ];
-    }
     public function resolveValue(Collection $options, Filters $filters): ValueResult
     {
-
+        $result = $this->meta['metric']->calculate($options, $filters);
 
         $configuration = Style::make();
-
-
-        $result = $this->meta['metric']->calculate($options, $filters);
 
         $valueResult = ValueResult::make()
             ->labels($result['labels']);
@@ -70,7 +37,7 @@ class BarChart extends BarChartWidget {
         return $valueResult;
 
 
-        ///-------------------
+        ///------------------- original example code
 
         $configuration = BarChatStyle::make()
             ->hoverBackgroundColor('green');
@@ -104,29 +71,18 @@ class BarChart extends BarChartWidget {
     }
 
 
-    /**
-     * Get the displayable label of the resource.
-     *
-     * @return string
-     */
-    public  function label(): string
+    public function getRandomData($min = 1, $max = 100): array
     {
-        return 'my label';
-    }
-
-
-    /**
-     * Get the displayable label of the resource.
-     *
-     * @return string
-     */
-    public function title(): string
-    {
-        return $this->meta('title');
-    }
-
-    public function uriKey(): string
-    {
-        return $this->meta('uriKey');
+        return [
+            random_int($min, $max),
+            random_int($min, $max),
+            random_int($min, $max),
+            random_int($min, $max),
+            random_int($min, $max),
+            random_int($min, $max),
+            random_int($min, $max),
+            random_int($min, $max),
+            random_int($min, $max),
+        ];
     }
 }

@@ -54,14 +54,9 @@ class actionEventTypes extends BaseDatametricable
                     ['dateColumn' => 'created_at']
                 );
 
-                $builder = $calcuation->query();
-
-                // get sql:
-//                $query = vsprintf(str_replace(array('?'), array('\'%s\''), $builder->toSql()), $builder->getBindings());
-//                dd($query);
 
 
-//                dd( $calcuation->query()->toSql());
+
 
                 $calcuationPreviousValue = (clone $calcuation)->applyFilter($filters, DateRangeDefined::class,
                     ['dateColumn' => 'created_at', 'previousRange' => true]

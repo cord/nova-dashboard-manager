@@ -101,9 +101,9 @@ class users extends BaseDatametricable
                         'Users' => [
                             'name' => 'Users',
                             'data' => $result['values'],
-                            'options' => []
                         ]
-                    ]
+                    ],
+                    'options' => []
                 ];
 
                 break;

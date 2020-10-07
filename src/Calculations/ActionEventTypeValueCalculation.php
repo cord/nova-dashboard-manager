@@ -15,6 +15,12 @@ class ActionEventTypeValueCalculation extends BaseValueCalculation
      */
     public function newQuery()
     {
+        // get sql:
+//                $builder = $calcuation->query();
+//                $query = vsprintf(str_replace(array('?'), array('\'%s\''), $builder->toSql()), $builder->getBindings());
+//                dd($query);
+
+
         return (new ActionEvent())->newQuery()
             ->selectRaw('actionable_type, count(*) as count')
             ->groupBy('actionable_type')
