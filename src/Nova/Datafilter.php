@@ -106,15 +106,16 @@ class Datafilter extends Resource
 
         $fields = [
             InlineMorphTo::make(__('Datafilter'), 'filterable')
-                ->types($datafilterables)
-                ->default(''),
+                ->types($datafilterables)->required()
+                ->default('')
+            ,
         ];
 
 
         return
             array_merge(
                 [
-                    Text::make(__('Name'), 'name'),
+                    Text::make(__('Name'), 'name')->required(),
                     Textarea::make(__('Description'), 'description')
                         ->alwaysShow()
                         ->rows(3)

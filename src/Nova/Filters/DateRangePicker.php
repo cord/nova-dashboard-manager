@@ -36,8 +36,6 @@ class DateRangePicker extends DateRangeFilter
         $to = Carbon::parse($value[1])->endOfDay();
 
         return $query->whereBetween('created_at', [$from, $to]);
-
-
     }
 
     public function jsonSerialize()

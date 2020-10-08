@@ -5,9 +5,13 @@ namespace Marispro\NovaDashboardManager\Nova\Filters;
 use Illuminate\Http\Request;
 use Laravel\Nova\Actions\ActionEvent;
 use Laravel\Nova\Filters\BooleanFilter;
+use Illuminate\Support\Arr;
 
 class ActionEventType extends BooleanFilter
 {
+
+    use Filterable;
+
     /**
      * Apply the filter to the given query.
      *
@@ -19,7 +23,16 @@ class ActionEventType extends BooleanFilter
     public function apply(Request $request, $query, $value)
     {
         if ($query->getModel()->getTable() == (new ActionEvent)->getTable()) {
-            $query = $query->whereIn('actionable_type', array_keys($value));
+
+            $filteredValues = Arr::where($value, function ($value, $key) {
+                if ($value) {
+                    return $key;
+                }
+            });
+            if (sizeof($filteredValues) > 0) {
+                $query = $query->whereIn('actionable_type', array_keys($filteredValues));
+            }
+
         }
         return $query;
 
@@ -44,14 +57,17 @@ class ActionEventType extends BooleanFilter
      */
     public function options(Request $request)
     {
-        $eventTypes = $this->eventTypes();
-        return $eventTypes;
+        return $this->eventTypes();
     }
 
     public function eventTypes()
     {
         $actionEventTypes = ActionEvent::select('actionable_type')->distinct()->get();
-        $actionEventTypes = $actionEventTypes->groupBy('actionable_type')->keys()->flip()->all();
-        return $actionEventTypes;
+        $actionEventTypes = $actionEventTypes->groupBy('actionable_type')->keys()->all();
+
+        // set keys and values
+        $actionEventTypesFull = array_combine($actionEventTypes, $actionEventTypes);
+        return $actionEventTypesFull;
+
     }
 }

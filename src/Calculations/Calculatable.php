@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Makeable;
 use Laravel\Nova\Query\ApplyFilter;
+use Marispro\NovaDashboardManager\Nova\Filters\ActionEventType;
 
 trait Calculatable
 {
+
 
     use Makeable;
 
@@ -28,7 +30,8 @@ trait Calculatable
         $this->query = $this->newQuery();
     }
 
-    public function __clone() {
+    public function __clone()
+    {
         $this->query = clone $this->query;
     }
 
@@ -47,10 +50,23 @@ trait Calculatable
             $filters->filters()
                 ->each(static function (ApplyFilter $applyFilter) use ($builder, $filterClass, $options) {
                     if (get_class($applyFilter->filter) == $filterClass) {
+                        if ($filterClass == ActionEventType::class) {
+//                        dd($applyFilter->value);
+
+                        }
                         $applyFilter->filter->withMeta($options)->apply(resolve(NovaRequest::class), $builder, $applyFilter->value);
                     }
                 });
         });
         return $this;
     }
+
+
+    public function debugQuery(Builder $query)
+    {
+        $sql = vsprintf(str_replace(array('?'), array('\'%s\''), $query->toSql()), $query->getBindings());
+        return $sql;
+    }
+
+
 }

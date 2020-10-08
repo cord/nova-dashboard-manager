@@ -82,7 +82,7 @@ class CustomView extends View
         $filters = [];
 
         $this->databoard->datafilters->each(function ($datafilter, $key) use (&$filters) {
-            $filters[] = (new $datafilter->filterable->filter)->withMeta([]);
+            $filters[] = (new $datafilter->filterable->filter)->withMeta(['default' => $datafilter->filterable->DefaultValue]);
         });
         return $filters;
     }
@@ -98,7 +98,6 @@ class CustomView extends View
     public function widgets(): array
     {
         $widgets = [];
-
         $this->databoard->datawidgets->each(function ($datawidget, $key) use (&$widgets) {
             $widgets[] =
                 $datawidget->metricable->visualable->getVisualisation(
@@ -112,8 +111,6 @@ class CustomView extends View
 //                ->withMeta(['widget_id' => $datawidget->id, 'label' => $datawidget->name])
             ;
         });
-
-//        dd($widgets);
         return $widgets;
     }
 

@@ -30,7 +30,7 @@ class BaseFilter extends Resource
      *
      * @var  string
      */
-    public static $model = BaseDatafilterable::class;
+//    public static $model = BaseDatafilterable::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -77,4 +77,10 @@ class BaseFilter extends Resource
     {
         return [];
     }
+
+    public function getFilterClass()
+    {
+        return (new static::$model)->filter;
+    }
+
 }

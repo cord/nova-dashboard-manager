@@ -18,7 +18,6 @@ class BaseDatafilterable extends Model
     var $filter;
 
 
-
     public $casts = [
         'extra_attributes' => 'array',
     ];
@@ -29,4 +28,13 @@ class BaseDatafilterable extends Model
         $this->setTable(Str::singular(config('nova-dashboard-manager.tables.filters')) . '_standard');
     }
 
+    public function getDefaultValueAttribute()
+    {
+        return $this->extra_attributes->default_value;
+    }
+
+    public function setDefaultValueAttribute($value)
+    {
+        $this->extra_attributes->default_value = $value;
+    }
 }

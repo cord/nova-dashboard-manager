@@ -7,14 +7,8 @@ use DigitalCreative\NovaDashboard\Filters;
 use Illuminate\Support\Collection;
 use Marispro\NovaDashboardManager\Calculations\ActionEventTrendCalculation;
 use Marispro\NovaDashboardManager\Calculations\ActionEventValueCalculation;
-use Marispro\NovaDashboardManager\Calculations\WidgetTrendCalculation;
-use Marispro\NovaDashboardManager\Calculations\WidgetValueCalculation;
-use Marispro\NovaDashboardManager\Nova\Filters\ActionEventType;
-use Marispro\NovaDashboardManager\Nova\Filters\DateFilterFrom;
-use Marispro\NovaDashboardManager\Nova\Filters\DateFilterTo;
 use Illuminate\Http\Request;
 use Laravel\Nova\Actions\ActionEvent;
-use Marispro\NovaDashboardManager\Nova\Filters\DateRangeDefined;
 
 class actionEvents extends BaseDatametricable
 {
@@ -52,13 +46,18 @@ class actionEvents extends BaseDatametricable
 
                 $calcuation = ActionEventValueCalculation::make();
 
-                $calcuationCurrentValue = (clone $calcuation)->applyFilter($filters, DateRangeDefined::class,
-                    ['dateColumn' => 'created_at']
-                );
+                $calcuationCurrentValue = (clone $calcuation)
+                    ->applyFilter($filters, \Marispro\NovaDashboardManager\Nova\Filters\DateRangeDefined::class,
+                        ['dateColumn' => 'created_at'])
+                    ->applyFilter($filters, \Marispro\NovaDashboardManager\Nova\Filters\ActionEventType::class);
 
-                $calcuationPreviousValue = (clone $calcuation)->applyFilter($filters, DateRangeDefined::class,
-                    ['dateColumn' => 'created_at', 'previousRange' => true]
-                );
+                $calcuationPreviousValue = (clone $calcuation)
+                    ->applyFilter($filters, \Marispro\NovaDashboardManager\Nova\Filters\DateRangeDefined::class,
+                        ['dateColumn' => 'created_at', 'previousRange' => true]
+                    )
+                    ->applyFilter($filters, \Marispro\NovaDashboardManager\Nova\Filters\ActionEventType::class);;
+
+//                dd($calcuation->debugQuery($calcuationCurrentValue->query()));
 
                 return [
                     'currentValue' => $calcuationCurrentValue->query()->get()->count(),
@@ -73,6 +72,7 @@ class actionEvents extends BaseDatametricable
 
                 // Using Nova Trend calculations
                 $calcuation = ActionEventTrendCalculation::make();
+                $calcuation->applyFilter($filters, \Marispro\NovaDashboardManager\Nova\Filters\ActionEventType::class);
 
                 $dateValue = $filters->getFilterValue(DateRangeDefined::class);
 

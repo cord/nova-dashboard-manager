@@ -12,18 +12,7 @@ class DateRange extends BaseDatafilterable
 
 
     public $casts = [
-        'extra_attributes' => 'array',
-        'default_from' => 'date',
+        'extra_attributes' => 'array'
     ];
-
-    public function getDefaultFromAttribute()
-    {
-        return $this->castAttribute('default_from', $this->extra_attributes->default_from);
-    }
-
-    public function setDefaultFromAttribute($value)
-    {
-        $this->extra_attributes->default_from = $value;
-    }
 
 }

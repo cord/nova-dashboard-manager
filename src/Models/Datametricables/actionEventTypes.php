@@ -49,18 +49,18 @@ class actionEventTypes extends BaseDatametricable
 
                 $calcuation = ActionEventTypeValueCalculation::make();
 
-
-                $calcuationCurrentValue = (clone $calcuation)->applyFilter($filters, DateRangeDefined::class,
-                    ['dateColumn' => 'created_at']
-                );
-
-
-
+                $calcuationCurrentValue = (clone $calcuation)
+                    ->applyFilter($filters, DateRangeDefined::class,
+                        ['dateColumn' => 'created_at']
+                    )
+                    ->applyFilter($filters, \Marispro\NovaDashboardManager\Nova\Filters\ActionEventType::class);
 
 
-                $calcuationPreviousValue = (clone $calcuation)->applyFilter($filters, DateRangeDefined::class,
-                    ['dateColumn' => 'created_at', 'previousRange' => true]
-                );
+                $calcuationPreviousValue = (clone $calcuation)
+                    ->applyFilter($filters, DateRangeDefined::class,
+                        ['dateColumn' => 'created_at', 'previousRange' => true]
+                    )
+                    ->applyFilter($filters, \Marispro\NovaDashboardManager\Nova\Filters\ActionEventType::class);
 
                 return [
                     'currentValue' => $calcuationCurrentValue->query()->get()->count(),
@@ -75,6 +75,8 @@ class actionEventTypes extends BaseDatametricable
 
                 // Using Nova Trend calculations
                 $calcuation = ActionEventTypeTrendCalculation::make();
+                $calcuation->applyFilter($filters, \Marispro\NovaDashboardManager\Nova\Filters\ActionEventType::class);
+
 
                 $dateValue = $filters->getFilterValue(DateRangeDefined::class);
 

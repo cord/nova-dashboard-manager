@@ -3,7 +3,9 @@
 namespace Marispro\NovaDashboardManager\Nova\Datafilterables;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BooleanGroup;
 use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\Select;
 
 class ActionEventTypes extends BaseFilter
 {
@@ -22,7 +24,11 @@ class ActionEventTypes extends BaseFilter
      */
     public function filterFields(Request $request)
     {
+        $filterClass = $this->getFilterClass();
+        $eventTypes = (new $filterClass)->eventTypes();
+
         return [
+            BooleanGroup::make(__('Pre-Selected Action Events'), 'DefaultValue')->options($eventTypes)->hideFalseValues(),
         ];
     }
 }

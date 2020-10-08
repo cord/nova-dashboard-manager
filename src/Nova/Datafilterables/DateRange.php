@@ -3,10 +3,15 @@
 namespace Marispro\NovaDashboardManager\Nova\Datafilterables;
 
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\Select;
+
+use Marispro\NovaDashboardManager\Nova\Filters\Filterable;
 
 class DateRange extends BaseFilter
 {
+
+    use Filterable;
+
     /**
      * The model the resource corresponds to.
      *
@@ -23,7 +28,7 @@ class DateRange extends BaseFilter
     public function filterFields(Request $request)
     {
         return [
-//            Date::make(__('Default Date To'), 'default_to'),
+            Select::make(__('Default Range'), 'DefaultValue')->options(array_flip($this->rangeOptions())),
         ];
     }
 }
