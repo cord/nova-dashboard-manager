@@ -144,7 +144,7 @@ class DashboardConfiguration extends Resource
 
                     RelationshipCount::make('Data Widgets', 'datawidgets')->onlyOnIndex(),
                     RelationshipCount::make('Data Filters', 'datafilters')->onlyOnIndex(),
-
+                    /*
                     (new Tabs('Relations', [
                         'Data Widgets' => [
                             BelongsToMany::make('datawidgets')
@@ -157,6 +157,7 @@ class DashboardConfiguration extends Resource
 
                         ]
                     ]))->defaultSearch(true),
+                    */
 
                 ]
             );
